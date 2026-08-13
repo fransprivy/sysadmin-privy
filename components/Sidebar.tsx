@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 interface SidebarProps {
-  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo' | 'document-category' | 'reminder' | 'document-handover' | 'admins' | 'contacts' | 'groups' | 'billing' | 'payment-history' | 'reports';
+  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo' | 'document-category' | 'reminder' | 'document-handover' | 'admins' | 'contacts' | 'groups' | 'billing' | 'payment-history' | 'reports' | 'privypal';
 }
 
 export function Sidebar({ activePage }: SidebarProps) {
@@ -22,6 +22,7 @@ export function Sidebar({ activePage }: SidebarProps) {
     { label: 'Email logo', icon: FileText, href: '/email-logo', id: 'email-logo' },
     { label: 'Document handover', icon: FileText, href: '/document-handover', id: 'document-handover' },
     { label: 'Document category', icon: FileText, href: '/document-category', id: 'document-category' },
+    { label: 'PrivyPal', icon: FileText, href: '/privypal', id: 'privypal' },
   ];
 
   const userManagementItems = [
@@ -51,6 +52,7 @@ export function Sidebar({ activePage }: SidebarProps) {
     if (id === 'billing' && pathname === '/billing') return true;
     if (id === 'payment-history' && pathname === '/payment-history') return true;
     if (id === 'reports' && pathname === '/reports') return true;
+    if (id === 'privypal' && pathname === '/privypal') return true;
     return false;
   };
 
