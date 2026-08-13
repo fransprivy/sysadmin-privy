@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 interface SidebarProps {
-  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo';
+  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo' | 'document-category';
 }
 
 export function Sidebar({ activePage }: SidebarProps) {
@@ -21,7 +21,7 @@ export function Sidebar({ activePage }: SidebarProps) {
     { label: 'Reminder', icon: Clock, href: '#', id: 'reminder' },
     { label: 'Email logo', icon: FileText, href: '/email-logo', id: 'email-logo' },
     { label: 'Document handover', icon: FileText, href: '#', id: 'doc-handover' },
-    { label: 'Document category', icon: FileText, href: '#', id: 'doc-category' },
+    { label: 'Document category', icon: FileText, href: '/document-category', id: 'doc-category' },
   ];
 
   const isActive = (id: string) => {
@@ -30,6 +30,7 @@ export function Sidebar({ activePage }: SidebarProps) {
     if (id === 'enterprise-seal' && pathname === '/enterprise-seal') return true;
     if (id === 'enterprise-stamp' && pathname === '/enterprise-stamp') return true;
     if (id === 'email-logo' && pathname === '/email-logo') return true;
+    if (id === 'doc-category' && pathname === '/document-category') return true;
     return false;
   };
 
