@@ -9,8 +9,10 @@ interface AdminLayoutProps {
    * `content` is the 721px reading column from the Figma Overview frame.
    * `wide` fills the viewport instead — the Figma column is too narrow for the
    * data tables on the list pages, which wrap every date onto three lines.
+   * `bleed` drops the padding and gap entirely so the page can run edge to edge
+   * (the User and role tab bar spans the full content width).
    */
-  width?: 'content' | 'wide';
+  width?: 'content' | 'wide' | 'bleed';
   children: React.ReactNode;
 }
 
@@ -25,15 +27,19 @@ export function AdminLayout({ trail, width = 'content', children }: AdminLayoutP
       <Sidebar />
       <div className="ml-sidebar pt-topbar">
         <Breadcrumbs trail={trail} />
-        <main className="px-6 pb-8 pt-6">
-          <div
-            className={`mx-auto flex w-full flex-col gap-16 ${
-              width === 'content' ? 'max-w-content' : 'max-w-[1200px]'
-            }`}
-          >
-            {children}
-          </div>
-        </main>
+        {width === 'bleed' ? (
+          <main>{children}</main>
+        ) : (
+          <main className="px-6 pb-8 pt-6">
+            <div
+              className={`mx-auto flex w-full flex-col gap-16 ${
+                width === 'content' ? 'max-w-content' : 'max-w-[1200px]'
+              }`}
+            >
+              {children}
+            </div>
+          </main>
+        )}
       </div>
     </div>
   );

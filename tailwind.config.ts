@@ -10,6 +10,7 @@ const config: Config = {
         layer1: 'var(--bg-layer1)',
         'bg-alpha': 'var(--bg-default-alpha)',
         info: 'var(--bg-info)',
+        ground: 'var(--bg-ground)',
         success: 'var(--bg-success)',
         inverse: 'var(--bg-inverse)',
 
@@ -20,9 +21,11 @@ const config: Config = {
         link: 'var(--fg-link)',
         'info-fg': 'var(--fg-info)',
         'success-fg': 'var(--fg-success)',
+        muted: 'var(--fg-muted)',
 
         // Figma: border/*
         border: 'var(--border-default)',
+        'border-muted': 'var(--border-muted)',
 
         // Figma: brand/* and palette
         accent: 'var(--brand-accent)',

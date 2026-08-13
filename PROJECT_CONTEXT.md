@@ -136,6 +136,9 @@ export default function Page() {
 - `"content"` (default) — the 721px reading column from the Figma Overview frame.
 - `"wide"` — fills the viewport; use it for the data-table pages, where 721px
   wraps every date onto three lines.
+- `"bleed"` — no padding, no max-width, no gap; the page owns its own spacing.
+  Use it when a full-width element has to reach the edges of the content area,
+  such as the tab bar on User and role.
 
 #### `Sidebar.tsx` / `Topbar.tsx` / `Breadcrumbs.tsx`
 Rendered by `AdminLayout`; you should not need to mount them directly. To add a
@@ -500,12 +503,15 @@ as CSS variables in `app/globals.css`, then surfaced as Tailwind utilities in
 | `bg/default` | `--bg-default` | `bg-background` |
 | `bg/defaultAlpha` | `--bg-default-alpha` | `bg-bg-alpha` |
 | `bg/info` / `bg/success` | `--bg-info` / `--bg-success` | `bg-info` / `bg-success` |
+| `bg/ground` | `--bg-ground` | `bg-ground` |
 | `fg/default` | `--fg-default` | `text-foreground` |
 | `fg/subtle` | `--fg-subtle` | `text-subtle` |
 | `fg/subtlest` | `--fg-subtlest` | `text-subtlest` |
 | `fg/link` | `--fg-link` | `text-link` |
 | `fg/success` | `--fg-success` | `text-success-fg` |
+| `fg/muted` | `--fg-muted` | `text-muted` |
 | `border/default` | `--border-default` | `border-border` |
+| `border/muted` | `--border-muted` | `border-border-muted` |
 | `brand/accent` | `--brand-accent` | `text-accent` / `bg-accent` |
 | `brand/logo` | `--brand-logo` | `bg-logo` |
 
@@ -516,8 +522,17 @@ as CSS variables in `app/globals.css`, then surfaced as Tailwind utilities in
 > `lib/utils.ts` extends `tailwind-merge` so these custom sizes are not mistaken for
 > text colours. Without it, `cn('text-link', 'text-p2')` silently drops the colour.
 
+**Buttons:** the primary CTA is the **brand red** `#E42E2C` (`variant="primary"`),
+confirmed by "Add employee" on the User and role frame. Blue `brand/accent` is for
+links, toggles and status — use `variant="accent"` if you need a blue button.
+`variant="default"` is the neutral grey button (Overview's "Download").
+
 **Elevation:** `shadow-small`, `shadow-medium`. **Radii:** `rounded-sm` (6px),
 `rounded-md` (8px), `rounded-lg` (12px).
+
+> The Figma file contains two generations of the token library. Some frames show
+> literal fallbacks from the older set (e.g. `#5b6778` for `fg/subtle`), but the
+> **bound variables** resolve to the values above — those are what the app uses.
 
 **Layout constants** (from the Figma frame): 60px topbar, 285px sidebar, 721px
 content column — exposed as `h-topbar`, `w-sidebar`, `max-w-content`.

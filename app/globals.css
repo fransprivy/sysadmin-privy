@@ -13,6 +13,7 @@
   --bg-layer1: #fdfdfd;
   --bg-default-alpha: rgba(134, 136, 139, 0.05);
   --bg-info: #e5f0fa;
+  --bg-ground: #f4f5f7;
   --bg-success: #e9f7ec;
   --bg-inverse: #0d1117;
 
@@ -23,9 +24,11 @@
   --fg-link: #0057b4;
   --fg-info: #004996;
   --fg-success: #248c3e;
+  --fg-muted: #cbd1d8;
 
   /* Border */
   --border-default: #dbdbdc;
+  --border-muted: #f4f5f7;
 
   /* Brand + palette */
   --brand-accent: #0065d1;
