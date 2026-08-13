@@ -12,7 +12,7 @@ This is a production-ready **Admin Center Dashboard** built from a Figma prototy
 
 ## 📊 Project Status
 
-### ✅ Completed Pages (14/14) ✨
+### ✅ Completed Pages (16/16) 🎉
 1. **Admin Center (Overview)** - `/` - Dashboard with stats and activity summary
 2. **User and Role Management** - `/user-and-role` - Employee table with search/filter
 3. **Enterprise Seal** - `/enterprise-seal` - Seal gallery with upload
@@ -27,6 +27,8 @@ This is a production-ready **Admin Center Dashboard** built from a Figma prototy
 12. **Billing** - `/billing` - Billing information and invoice history
 13. **Payment History** - `/payment-history` - Payment transactions list
 14. **Reports** - `/reports` - Report generation and download
+15. **PrivyPal (AI Features)** - `/privypal` - AI assistant configuration and toggle
+16. **Reports Detail** - `/reports-detail` - Balance usage report with filtering and analytics
 
 ---
 
@@ -152,6 +154,7 @@ export default function Page() {
 - `'billing'` - for `/billing`
 - `'payment-history'` - for `/payment-history`
 - `'reports'` - for `/reports`
+- `'privypal'` - for `/privypal`
 
 #### `Button.tsx`
 Shadcn/ui Button component with variants:
