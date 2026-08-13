@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Settings, Bell, Download, Search, MoreVertical } from 'lucide-react';
+import { Download, Search, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Sidebar } from '@/components/Sidebar';
 
 interface Employee {
   id: string;
@@ -103,42 +102,15 @@ const EMPLOYEES: Employee[] = [
 ];
 
 function AvatarBadge({ initials }: { initials: string }) {
-  const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-yellow-500'];
+  const colors = ['bg-red40', 'bg-accent', 'bg-green40', 'bg-purple40', 'bg-orange40'];
   const colorIndex = initials.charCodeAt(0) % colors.length;
   return (
-    <div className={`${colors[colorIndex]} w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0`}>
+    <div className={`${colors[colorIndex]} w-10 h-10 rounded-full flex items-center justify-center text-white text-p2 font-medium flex-shrink-0`}>
       {initials}
     </div>
   );
 }
-
-
-function Topbar() {
-  return (
-    <div className="fixed top-0 left-0 right-0 h-16 border-b border-border bg-background flex items-center justify-between px-5 z-50">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-8 h-8 bg-red-600 rounded">
-          <span className="text-white font-bold text-sm">P</span>
-        </div>
-        <span className="text-lg font-semibold text-foreground">Admin Center</span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon">
-          <Bell className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon">
-          <Settings className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
-            U
-          </div>
-        </Button>
-      </div>
-    </div>
-  );
-}
+import { AdminLayout } from '@/components/AdminLayout';
 
 export default function UserAndRolePage() {
   const [selectedTab, setSelectedTab] = useState('employee');
@@ -151,128 +123,108 @@ export default function UserAndRolePage() {
 
   const tabs = ['Employee', 'Position', 'Department', 'Organizational structure'];
 
-  return (
-    <div className="flex h-screen bg-background">
-      <Topbar />
-      <Sidebar activePage="user-and-role" />
+    return (
+    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'User and role' }]} width="wide">
+      {/* Page Content */}
+      <div className="space-y-6">
+        {/* Tabs */}
+        <div className="border-b border-border flex gap-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setSelectedTab(tab.toLowerCase())}
+              className={`pb-3 text-p2 font-medium transition-colors ${
+                selectedTab === tab.toLowerCase()
+                  ? 'border-b-2 border-accent text-foreground'
+                  : 'text-subtle hover:text-foreground'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-      <main className="ml-72 mt-16 flex-1 overflow-auto">
-        {/* Breadcrumbs */}
-        <div className="sticky top-0 border-b border-border bg-background/95 px-8 py-3">
-          <div className="flex items-center gap-2 text-sm">
-            <a href="#" className="text-muted-foreground hover:text-foreground">
-              PrivySign
-            </a>
-            <span className="text-muted-foreground">/</span>
-            <a href="#" className="text-muted-foreground hover:text-foreground">
-              Admin Center
-            </a>
-            <span className="text-muted-foreground">/</span>
-            <span className="font-semibold text-foreground">User and role</span>
+        {/* Stats and Controls */}
+        <div className="flex items-center justify-between">
+          <div className="text-p2 text-subtle">
+            <span className="font-medium text-foreground">12</span>/100
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-subtle" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 rounded-md border border-border bg-background text-p2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+            <select className="px-3 py-2 rounded-md border border-border bg-background text-p2">
+              <option>Name</option>
+              <option>Position</option>
+              <option>Email</option>
+            </select>
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+            <Button className="bg-red40 hover:bg-logo text-white">
+              Add employee
+            </Button>
           </div>
         </div>
 
-        {/* Page Content */}
-        <div className="p-8 space-y-6">
-          {/* Tabs */}
-          <div className="border-b border-border flex gap-8">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setSelectedTab(tab.toLowerCase())}
-                className={`pb-3 text-sm font-medium transition-colors ${
-                  selectedTab === tab.toLowerCase()
-                    ? 'border-b-2 border-blue-600 text-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
+        {/* Info Banner */}
+        <div className="bg-info border border-accent rounded-lg p-4 flex gap-3">
+          <div className="h-5 w-5 rounded-full bg-accent flex items-center justify-center text-white text-caption1 font-bold flex-shrink-0">
+            i
           </div>
+          <p className="text-p2 text-info-fg">Employees will not be able to access the enterprise after their active period ends</p>
+        </div>
 
-          {/* Stats and Controls */}
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">12</span>/100
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 pr-4 py-2 rounded-md border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-              </div>
-              <select className="px-3 py-2 rounded-md border border-border bg-background text-sm">
-                <option>Name</option>
-                <option>Position</option>
-                <option>Email</option>
-              </select>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-              <Button className="bg-red-600 hover:bg-red-700 text-white">
-                Add employee
-              </Button>
-            </div>
-          </div>
-
-          {/* Info Banner */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
-            <div className="h-5 w-5 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-              i
-            </div>
-            <p className="text-sm text-blue-900">Employees will not be able to access the enterprise after their active period ends</p>
-          </div>
-
-          {/* Table */}
-          <Card className="overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-muted border-b border-border">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-foreground">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-foreground">Position</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-foreground">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-foreground">Added at</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-foreground">Active until</th>
-                    <th className="px-6 py-3 text-center text-xs font-semibold text-foreground">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {filteredEmployees.map((employee) => (
-                    <tr key={employee.id} className="hover:bg-muted/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <AvatarBadge initials={employee.avatar} />
-                          <div>
-                            <p className="text-sm font-medium text-foreground">{employee.name}</p>
-                            {employee.role && <p className="text-xs text-blue-600">{employee.role}</p>}
-                          </div>
+        {/* Table */}
+        <Card className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-bg-alpha border-b border-border">
+                <tr>
+                  <th className="px-6 py-3 text-left text-caption1 font-medium text-foreground">Name</th>
+                  <th className="px-6 py-3 text-left text-caption1 font-medium text-foreground">Position</th>
+                  <th className="px-6 py-3 text-left text-caption1 font-medium text-foreground">Email</th>
+                  <th className="px-6 py-3 text-left text-caption1 font-medium text-foreground">Added at</th>
+                  <th className="px-6 py-3 text-left text-caption1 font-medium text-foreground">Active until</th>
+                  <th className="px-6 py-3 text-center text-caption1 font-medium text-foreground">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {filteredEmployees.map((employee) => (
+                  <tr key={employee.id} className="hover:bg-bg-alpha/50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <AvatarBadge initials={employee.avatar} />
+                        <div>
+                          <p className="text-p2 font-medium text-foreground">{employee.name}</p>
+                          {employee.role && <p className="text-caption1 text-accent">{employee.role}</p>}
                         </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-foreground">{employee.position}</td>
-                      <td className="px-6 py-4 text-sm text-foreground">{employee.email}</td>
-                      <td className="px-6 py-4 text-sm text-foreground">{employee.addedAt}</td>
-                      <td className="px-6 py-4 text-sm text-foreground">{employee.activeUntil}</td>
-                      <td className="px-6 py-4 text-center">
-                        <button className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-muted transition-colors">
-                          <MoreVertical className="h-4 w-4 text-muted-foreground" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
-      </main>
-    </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-p2 text-foreground">{employee.position}</td>
+                    <td className="px-6 py-4 text-p2 text-foreground">{employee.email}</td>
+                    <td className="px-6 py-4 text-p2 text-foreground">{employee.addedAt}</td>
+                    <td className="px-6 py-4 text-p2 text-foreground">{employee.activeUntil}</td>
+                    <td className="px-6 py-4 text-center">
+                      <button className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-bg-alpha transition-colors">
+                        <MoreVertical className="h-4 w-4 text-subtle" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
+    </AdminLayout>
   );
 }

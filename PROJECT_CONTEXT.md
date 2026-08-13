@@ -115,57 +115,37 @@ This is a production-ready **Admin Center Dashboard** built from a Figma prototy
 
 ### Shared Components
 
-#### `Sidebar.tsx` (Reusable Navigation)
-- **Purpose:** Navigation sidebar used across all pages
-- **Features:**
-  - Dynamic active page detection using `usePathname()`
-  - Links to all implemented pages
-  - Enterprise account dropdown
-  - Plan status card
-  - Organized sections: General, User Management, Other
-  - Responsive sidebar layout
+#### `AdminLayout.tsx` (Page Shell) — use this for every page
+Wraps a page in the topbar, sidebar, breadcrumbs and the centred content column
+from the Figma frame. Pages no longer define their own `Topbar` or pass
+`activePage` — the sidebar derives the active item from `usePathname()`.
 
-**Usage:**
 ```tsx
-import { Sidebar } from '@/components/Sidebar';
+import { AdminLayout, AdminSection } from '@/components/AdminLayout';
 
 export default function Page() {
   return (
-    <>
-      <Sidebar activePage="overview" />
-      {/* Content */}
-    </>
+    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Billing' }]}>
+      <AdminSection title="General">{/* … */}</AdminSection>
+    </AdminLayout>
   );
 }
 ```
 
-**Available `activePage` values:**
-- `'overview'` - for `/`
-- `'user-and-role'` - for `/user-and-role`
-- `'enterprise-seal'` - for `/enterprise-seal`
-- `'enterprise-stamp'` - for `/enterprise-stamp`
-- `'email-logo'` - for `/email-logo`
-- `'document-category'` - for `/document-category`
-- `'reminder'` - for `/reminder`
-- `'document-handover'` - for `/document-handover`
-- `'admins'` - for `/admins`
-- `'contacts'` - for `/contacts`
-- `'groups'` - for `/groups`
-- `'billing'` - for `/billing`
-- `'payment-history'` - for `/payment-history`
-- `'reports'` - for `/reports`
-- `'privypal'` - for `/privypal`
+`width` prop:
+- `"content"` (default) — the 721px reading column from the Figma Overview frame.
+- `"wide"` — fills the viewport; use it for the data-table pages, where 721px
+  wraps every date onto three lines.
 
-#### `Button.tsx`
-Shadcn/ui Button component with variants:
-- `default`, `destructive`, `outline`, `secondary`, `ghost`, `link`
-- Sizes: `default`, `sm`, `lg`, `icon`
+#### `Sidebar.tsx` / `Topbar.tsx` / `Breadcrumbs.tsx`
+Rendered by `AdminLayout`; you should not need to mount them directly. To add a
+nav entry, append to `SECTIONS` in `Sidebar.tsx` — a `match` array keeps the item
+highlighted on detail routes (e.g. `/reports-detail` highlights Reports).
 
-#### `Card.tsx`
-Shadcn/ui Card component for content containers.
-
-#### `Badge.tsx`
-Shadcn/ui Badge component for labels/tags.
+#### `components/icons/index.tsx`
+Icon components generated from the Figma exports in `public/assets/icons`.
+Monochrome icons use `currentColor` so nav states can recolour them; the activity
+icons keep their brand colours. Regenerate them from Figma rather than hand-editing.
 
 ---
 
@@ -177,27 +157,13 @@ All pages follow this pattern:
 'use client';
 
 import React, { useState } from 'react';
-import { Sidebar } from '@/components/Sidebar';
-
-function Topbar() {
-  return (
-    <div className="fixed top-0 left-0 right-0 h-16 border-b border-border bg-background flex items-center justify-between px-5 z-50">
-      {/* Logo, title, and action buttons */}
-    </div>
-  );
-}
+import { AdminLayout } from '@/components/AdminLayout';
 
 export default function PageName() {
   return (
-    <div className="flex h-screen bg-background">
-      <Topbar />
-      <Sidebar activePage="page-id" />
-
-      <main className="ml-72 mt-16 flex-1 overflow-auto">
-        {/* Breadcrumbs */}
-        {/* Page Content */}
-      </main>
-    </div>
+    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Page name' }]}>
+      {/* Page content — the shell supplies topbar, sidebar and breadcrumbs */}
+    </AdminLayout>
   );
 }
 ```
@@ -213,48 +179,15 @@ Create `components/PageName.tsx`:
 'use client';
 
 import React, { useState } from 'react';
-import { Settings, Bell } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Sidebar } from '@/components/Sidebar';
-
-function Topbar() {
-  return (
-    <div className="fixed top-0 left-0 right-0 h-16 border-b border-border bg-background flex items-center justify-between px-5 z-50">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center justify-center w-8 h-8 bg-red-600 rounded">
-          <span className="text-white font-bold text-sm">P</span>
-        </div>
-        <span className="text-lg font-semibold text-foreground">Admin Center</span>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon">
-          <Bell className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon">
-          <Settings className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
-            U
-          </div>
-        </Button>
-      </div>
-    </div>
-  );
-}
+import { AdminLayout } from '@/components/AdminLayout';
 
 export default function PageNamePage() {
   return (
-    <div className="flex h-screen bg-background">
-      <Topbar />
-      <Sidebar activePage="page-id" />
-
-      <main className="ml-72 mt-16 flex-1 overflow-auto">
-        {/* Content */}
-      </main>
-    </div>
+    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Page name' }]}>
+      {/* Content — topbar, sidebar and breadcrumbs come from the shell.
+          Add width="wide" if the page holds a data table. */}
+    </AdminLayout>
   );
 }
 ```
@@ -270,23 +203,16 @@ export default function Page() {
 }
 ```
 
-### Step 3: Update Sidebar Navigation
-1. Update `Sidebar.tsx` interface:
+### Step 3: Add the Sidebar Entry
+Append to the relevant group in `SECTIONS` in `Sidebar.tsx`. Active state is
+derived from the route, so there is nothing else to wire up:
+
 ```tsx
-interface SidebarProps {
-  activePage?: 'overview' | 'page-id';
-}
+{ label: 'Page Name', href: '/page-name', icon: NavPageNameIcon }
 ```
 
-2. Add to `navItems`:
-```tsx
-{ label: 'Page Name', icon: IconName, href: '/page-name', id: 'page-id' }
-```
-
-3. Add to `isActive()` function:
-```tsx
-if (id === 'page-id' && pathname === '/page-name') return true;
-```
+Use an icon from `components/icons` (exported from Figma). If the page has detail
+routes that should keep it highlighted, add `match: ['/page-name-detail']`.
 
 ### Step 4: Commit and Deploy
 ```bash
@@ -328,7 +254,7 @@ className="border border-border"      // Border
 // Layout
 className="flex items-center gap-3"   // Flexbox
 className="grid grid-cols-3 gap-6"    // Grid
-className="ml-72 mt-16"               // Sidebar + topbar offset
+AdminLayout handles the sidebar + topbar offset for you
 
 // States
 className="hover:bg-muted"            // Hover
@@ -563,6 +489,40 @@ All 14 admin pages from the Figma prototype have been successfully implemented.
 
 ---
 
+## 🎨 Design System
+
+Tokens come from the Figma library (file `7ziFoWatKsolh3Hak3AlkI`) and are declared
+as CSS variables in `app/globals.css`, then surfaced as Tailwind utilities in
+`tailwind.config.ts`. Use the token classes — not raw Tailwind palette colours.
+
+| Figma variable | CSS variable | Tailwind class |
+| --- | --- | --- |
+| `bg/default` | `--bg-default` | `bg-background` |
+| `bg/defaultAlpha` | `--bg-default-alpha` | `bg-bg-alpha` |
+| `bg/info` / `bg/success` | `--bg-info` / `--bg-success` | `bg-info` / `bg-success` |
+| `fg/default` | `--fg-default` | `text-foreground` |
+| `fg/subtle` | `--fg-subtle` | `text-subtle` |
+| `fg/subtlest` | `--fg-subtlest` | `text-subtlest` |
+| `fg/link` | `--fg-link` | `text-link` |
+| `fg/success` | `--fg-success` | `text-success-fg` |
+| `border/default` | `--border-default` | `border-border` |
+| `brand/accent` | `--brand-accent` | `text-accent` / `bg-accent` |
+| `brand/logo` | `--brand-logo` | `bg-logo` |
+
+**Type ramp** (DM Sans, loaded via `next/font`): `text-caption2` (11), `text-caption1`
+(12), `text-p2` (14), `text-p1` (16), `text-b1` (16/0.4), `text-h6` (20). Only weights
+400/500/700 are loaded — use `font-medium`, not `font-semibold`.
+
+> `lib/utils.ts` extends `tailwind-merge` so these custom sizes are not mistaken for
+> text colours. Without it, `cn('text-link', 'text-p2')` silently drops the colour.
+
+**Elevation:** `shadow-small`, `shadow-medium`. **Radii:** `rounded-sm` (6px),
+`rounded-md` (8px), `rounded-lg` (12px).
+
+**Layout constants** (from the Figma frame): 60px topbar, 285px sidebar, 721px
+content column — exposed as `h-topbar`, `w-sidebar`, `max-w-content`.
+
+
 ## 🔗 Quick Links
 
 - **Live App:** https://sysadmin-privy.vercel.app/
@@ -635,7 +595,7 @@ import { Sidebar } from '@/components/Sidebar';
 - Verify `globals.css` is imported in `app/layout.tsx`
 
 ### Sidebar link not highlighting
-- Check `activePage` prop matches ID in `navItems`
+- Check the `href` in `SECTIONS` (Sidebar.tsx) matches the route exactly
 - Verify `isActive()` function checks correct pathname
 - Ensure route matches `href` in navItems
 
