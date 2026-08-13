@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 interface SidebarProps {
-  activePage?: 'overview' | 'user-and-role';
+  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal';
 }
 
 export function Sidebar({ activePage }: SidebarProps) {
@@ -16,7 +16,7 @@ export function Sidebar({ activePage }: SidebarProps) {
   const navItems = [
     { label: 'Overview', icon: Home, href: '/', id: 'overview' },
     { label: 'User and role', icon: Users, href: '/user-and-role', id: 'user-and-role' },
-    { label: 'Enterprise seal', icon: Shield, href: '#', id: 'enterprise-seal' },
+    { label: 'Enterprise seal', icon: Shield, href: '/enterprise-seal', id: 'enterprise-seal' },
     { label: 'Enterprise stamp', icon: Stamp, href: '#', id: 'enterprise-stamp' },
     { label: 'Reminder', icon: Clock, href: '#', id: 'reminder' },
     { label: 'Email logo', icon: FileText, href: '#', id: 'email-logo' },
@@ -27,6 +27,7 @@ export function Sidebar({ activePage }: SidebarProps) {
   const isActive = (id: string) => {
     if (id === 'overview' && pathname === '/') return true;
     if (id === 'user-and-role' && pathname === '/user-and-role') return true;
+    if (id === 'enterprise-seal' && pathname === '/enterprise-seal') return true;
     return false;
   };
 
