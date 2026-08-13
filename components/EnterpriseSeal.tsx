@@ -1,158 +1,119 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Upload } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { useRef, useState } from 'react';
+import { AdminLayout } from '@/components/AdminLayout';
+import { DiamondIcon, ImageUploadIcon } from '@/components/icons';
+import { PrivyLogo, type LogoVariant } from '@/components/ui/privy-logo';
+import { Toast } from '@/components/ui/toast';
 
 interface Seal {
   id: string;
-  name: string;
-  preview: React.ReactNode;
-  isActive?: boolean;
-  isUploadSlot?: boolean;
+  label: string;
+  variant: LogoVariant;
+  /** Figma renders each lockup at a fixed size inside the 192px tile. */
+  className: string;
 }
 
 const SEALS: Seal[] = [
-  {
-    id: 'upload',
-    name: 'Add seal',
-    isUploadSlot: true,
-    preview: null,
-  },
-  {
-    id: 'privy-text-1',
-    name: 'Privy Text',
-    preview: (
-      <div className="flex items-center justify-center h-full">
-        <span className="text-h6 font-bold text-red40">privy</span>
-      </div>
-    ),
-    isActive: true,
-  },
-  {
-    id: 'privy-logo',
-    name: 'Privy Logo',
-    preview: (
-      <div className="flex items-center justify-center h-full">
-        <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-p1">P</span>
-        </div>
-      </div>
-    ),
-    isActive: true,
-  },
-  {
-    id: 'red-seal',
-    name: 'Red Seal',
-    preview: (
-      <div className="flex items-center justify-center h-full">
-        <div className="relative w-20 h-20">
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <ellipse cx="50" cy="50" rx="45" ry="35" fill="#EF4444" />
-            <ellipse cx="50" cy="50" rx="40" ry="30" fill="#DC2626" />
-            <circle cx="50" cy="50" r="8" fill="#991B1B" />
-          </svg>
-        </div>
-      </div>
-    ),
-    isActive: true,
-  },
-  {
-    id: 'gray-seal',
-    name: 'Gray Seal',
-    preview: (
-      <div className="flex items-center justify-center h-full opacity-50">
-        <div className="relative w-20 h-20">
-          <svg viewBox="0 0 100 100" className="w-full h-full">
-            <ellipse cx="50" cy="50" rx="45" ry="35" fill="#6B7280" />
-            <ellipse cx="50" cy="50" rx="40" ry="30" fill="#4B5563" />
-            <circle cx="50" cy="50" r="8" fill="#1F2937" />
-          </svg>
-        </div>
-      </div>
-    ),
-    isActive: false,
-  },
+  { id: 'horizontal', label: 'Privy horizontal lockup', variant: 'horizontal', className: 'h-[26px] w-[97px]' },
+  { id: 'vertical', label: 'Privy vertical lockup', variant: 'vertical', className: 'h-[102px] w-[97px]' },
+  { id: 'mark', label: 'Privy mark', variant: 'mark', className: 'h-[72px] w-[104px]' },
+  { id: 'mark-mono', label: 'Privy mark, monochrome', variant: 'mark-mono', className: 'h-[72px] w-[104px]' },
 ];
-import { AdminLayout } from '@/components/AdminLayout';
+
+const MAX_UPLOAD_MB = 5;
+
+/** Seal Container — 192px tile. */
+function SealTile({ seal }: { seal: Seal }) {
+  return (
+    <div className="flex size-48 shrink-0 flex-col items-center justify-center rounded-lg border border-border p-6">
+      <PrivyLogo variant={seal.variant} className={seal.className} />
+      <span className="sr-only">{seal.label}</span>
+    </div>
+  );
+}
+
+/** Add seal — dashed upload tile. */
+function UploadTile({ onUpload }: { onUpload: (message: string) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = (file?: File) => {
+    if (!file) return;
+    if (file.size > MAX_UPLOAD_MB * 1024 * 1024) {
+      onUpload(`“${file.name}” is larger than ${MAX_UPLOAD_MB}MB`);
+      return;
+    }
+    onUpload('Seal uploaded');
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={() => inputRef.current?.click()}
+      className="flex size-48 shrink-0 flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-bg-alpha p-6 transition-colors hover:bg-bg-alpha/80"
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png"
+        className="sr-only"
+        onChange={(event) => handleFile(event.target.files?.[0])}
+      />
+      <div className="flex w-full flex-1 flex-col items-center justify-center gap-5">
+        <div className="flex w-full flex-col items-center gap-1">
+          <ImageUploadIcon className="size-8 shrink-0" />
+          <p className="whitespace-nowrap text-p1 text-foreground">Add seal</p>
+        </div>
+        <div className="flex flex-col gap-1 text-center text-caption1">
+          <p className="w-36 font-medium text-accent">
+            Click here <span className="text-subtle">to upload</span>
+          </p>
+          <p className="w-36 text-subtlest">JPG or PNG up to {MAX_UPLOAD_MB}MB</p>
+        </div>
+      </div>
+    </button>
+  );
+}
 
 export default function EnterpriseSealPage() {
-  const [selectedSeal, setSelectedSeal] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
-    return (
-    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Enterprise seal' }]}>
-      {/* Page Content */}
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <h1 className="text-h6 font-bold text-foreground">Enterprise seal</h1>
-            <Badge className="bg-cyan-100 text-cyan-700 border-0">Premium</Badge>
+  return (
+    <AdminLayout
+      trail={[
+        { label: 'PrivySign', href: '#' },
+        { label: 'Admin Center', href: '/' },
+        { label: 'Enterprise seal' },
+      ]}
+    >
+      <section className="flex w-full flex-col gap-10">
+        {/* Title Section */}
+        <div className="flex w-full flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <h1 className="whitespace-nowrap text-h6 font-medium text-foreground">Enterprise seal</h1>
+            <span className="flex items-center justify-center gap-0.5 rounded-[7px] bg-teal0 px-2 py-0.5">
+              <DiamondIcon className="size-4 shrink-0" />
+              <span className="whitespace-nowrap text-p2 text-teal50">Premium</span>
+            </span>
           </div>
-          <p className="text-p2 text-subtle max-w-2xl">
-            Certify the integrity and origin of your enterprise documents by applying electronic seal.
+          <p className="w-full text-p2 text-subtle">
+            Certify the integrity and origin of your enterprise documents by applying electronic
+            seal.
             <br />
             The recommended image format is PNG with transparent background.
           </p>
         </div>
 
-        {/* Seals Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Seal Options — 192px tiles, 32px gutters */}
+        <div className="flex flex-wrap gap-8">
+          <UploadTile onUpload={setToast} />
           {SEALS.map((seal) => (
-            <div
-              key={seal.id}
-              className={`cursor-pointer transition-all ${
-                selectedSeal === seal.id ? 'ring-2 ring-blue-600' : ''
-              }`}
-              onClick={() => !seal.isUploadSlot && setSelectedSeal(seal.id)}
-            >
-              {seal.isUploadSlot ? (
-                <Card className="h-48 flex flex-col items-center justify-center p-6 hover:bg-bg-alpha transition-colors border-2 border-dashed">
-                  <div className="flex flex-col items-center gap-3">
-                    <Upload className="h-8 w-8 text-accent" />
-                    <p className="font-medium text-center text-foreground">Add seal</p>
-                    <p className="text-caption1 text-subtle text-center">
-                      Click here to upload
-                      <br />
-                      JPG or PNG up to 5MB
-                    </p>
-                  </div>
-                </Card>
-              ) : (
-                <Card
-                  className={`h-48 flex items-center justify-center p-6 transition-all ${
-                    selectedSeal === seal.id ? 'bg-info' : ''
-                  } ${!seal.isActive ? 'opacity-50' : ''}`}
-                >
-                  <div className="w-full h-full flex items-center justify-center">
-                    {seal.preview}
-                  </div>
-                </Card>
-              )}
-              {!seal.isUploadSlot && (
-                <p className="text-caption1 text-subtle text-center mt-2 font-medium">{seal.name}</p>
-              )}
-            </div>
+            <SealTile key={seal.id} seal={seal} />
           ))}
         </div>
+      </section>
 
-        {/* Selected Seal Info */}
-        {selectedSeal && selectedSeal !== 'upload' && (
-          <Card className="p-6 bg-info border-accent">
-            <div className="space-y-4">
-              <p className="text-p2 text-foreground">
-                <span className="font-medium">Selected seal:</span> {SEALS.find((s) => s.id === selectedSeal)?.name}
-              </p>
-              <div className="flex gap-3">
-                <Button className="bg-accent hover:bg-accent/90 text-white">Use this seal</Button>
-                <Button variant="outline">Cancel</Button>
-              </div>
-            </div>
-          </Card>
-        )}
-      </div>
+      <Toast message={toast ?? ''} open={toast !== null} onDismiss={() => setToast(null)} />
     </AdminLayout>
   );
 }

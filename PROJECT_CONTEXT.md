@@ -504,6 +504,7 @@ as CSS variables in `app/globals.css`, then surfaced as Tailwind utilities in
 | `bg/defaultAlpha` | `--bg-default-alpha` | `bg-bg-alpha` |
 | `bg/info` / `bg/success` | `--bg-info` / `--bg-success` | `bg-info` / `bg-success` |
 | `bg/ground` | `--bg-ground` | `bg-ground` |
+| `teal/0` / `teal/50` | `--teal-0` / `--teal-50` | `bg-teal0` / `text-teal50` |
 | `fg/default` | `--fg-default` | `text-foreground` |
 | `fg/subtle` | `--fg-subtle` | `text-subtle` |
 | `fg/subtlest` | `--fg-subtlest` | `text-subtlest` |
@@ -529,6 +530,12 @@ links, toggles and status — use `variant="accent"` if you need a blue button.
 
 **Elevation:** `shadow-small`, `shadow-medium`. **Radii:** `rounded-sm` (6px),
 `rounded-md` (8px), `rounded-lg` (12px).
+
+> **Layered SVG lockups.** Figma exports brand marks as absolutely positioned
+> fragments. Each layer needs its own positioned wrapper `<div>` with the image
+> filling it — an absolutely positioned `<img>` is a replaced element, so it
+> takes its intrinsic size and ignores the opposing offset, and the artwork
+> renders clipped. See `components/ui/privy-logo.tsx`.
 
 > **Squashed CTAs in Figma.** The Position / Department / Branch frames contain
 > `Button / Text` instances that were accidentally resized — 19.7px, 23.1px and

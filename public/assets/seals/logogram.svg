@@ -1,0 +1,20 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="380.25" height="264.75" viewBox="0 0 380.25 264.75" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="logogram">
+<circle id="Ellipse 2" cx="132.373" cy="132.373" r="132.373" fill="#E42E2C"/>
+<g id="gradient">
+<circle cx="132.373" cy="132.373" r="132.373" fill="url(#paint0_linear_0_22)" fill-opacity="0.2" style="mix-blend-mode:multiply"/>
+</g>
+<g id="Vector">
+<path d="M195.983 248.296C211.843 239.604 225.812 227.788 237.039 213.565L380.25 32.2223C365.089 20.2482 347.77 11.3116 329.282 5.9227C310.794 0.533807 291.499 -1.20187 272.499 0.814843C253.499 2.83156 234.791 7.66198 218.547 17.6764C211.354 22.111 208.31 26.0182 203.179 32.6039L202.868 33.0032L45.5 232.272C58.9482 244.084 74.6857 253 91.7543 258.476C108.823 263.951 126.866 265.873 144.784 264.123C162.703 262.373 180.123 256.988 195.983 248.296Z" fill="#E42E2C"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_22" x1="132.373" y1="132.373" x2="78.5411" y2="87.366" gradientUnits="userSpaceOnUse">
+<stop offset="0.157792"/>
+<stop offset="0.366183" stop-opacity="0.75"/>
+<stop offset="0.572837" stop-opacity="0.5"/>
+<stop offset="0.801512" stop-opacity="0.25"/>
+<stop offset="1" stop-opacity="0"/>
+</linearGradient>
+</defs>
+</svg>
