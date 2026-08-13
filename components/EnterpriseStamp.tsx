@@ -26,15 +26,10 @@ const STAMPS: Stamp[] = [
     name: 'Original',
     preview: (
       <div className="flex items-center justify-center h-full">
-        <div className="relative w-24 h-16">
-          <svg viewBox="0 0 100 60" className="w-full h-full">
-            <g transform="translate(50, 30) rotate(-15)">
-              <rect x="-35" y="-12" width="70" height="24" fill="none" stroke="#EF4444" strokeWidth="2"/>
-              <text x="0" y="0" textAnchor="middle" dominantBaseline="middle" className="font-bold" fontSize="14" fill="#EF4444">
-                ORIGINAL
-              </text>
-            </g>
-          </svg>
+        <div className="relative w-24 h-16 flex items-center justify-center" style={{ transform: 'rotate(-15deg)' }}>
+          <div className="border-2 border-red-500 px-3 py-2 text-xs font-bold text-red-500 text-center">
+            ORIGINAL
+          </div>
         </div>
       </div>
     ),
@@ -45,15 +40,10 @@ const STAMPS: Stamp[] = [
     name: 'Important',
     preview: (
       <div className="flex items-center justify-center h-full">
-        <div className="relative w-24 h-16">
-          <svg viewBox="0 0 100 60" className="w-full h-full">
-            <g transform="translate(50, 30) rotate(-15)">
-              <rect x="-35" y="-12" width="70" height="24" fill="none" stroke="#EF4444" strokeWidth="2"/>
-              <text x="0" y="0" textAnchor="middle" dominantBaseline="middle" className="font-bold" fontSize="14" fill="#EF4444">
-                IMPORTANT
-              </text>
-            </g>
-          </svg>
+        <div className="relative w-24 h-16 flex items-center justify-center" style={{ transform: 'rotate(-15deg)' }}>
+          <div className="border-2 border-red-500 px-3 py-2 text-xs font-bold text-red-500 text-center">
+            IMPORTANT
+          </div>
         </div>
       </div>
     ),
@@ -80,15 +70,10 @@ const STAMPS: Stamp[] = [
     name: 'Confidential',
     preview: (
       <div className="flex items-center justify-center h-full">
-        <div className="relative w-24 h-16">
-          <svg viewBox="0 0 100 60" className="w-full h-full">
-            <g transform="translate(50, 30) rotate(-15)">
-              <rect x="-40" y="-12" width="80" height="24" fill="none" stroke="#EF4444" strokeWidth="2"/>
-              <text x="0" y="0" textAnchor="middle" dominantBaseline="middle" className="font-bold" fontSize="12" fill="#EF4444">
-                CONFIDENTIAL
-              </text>
-            </g>
-          </svg>
+        <div className="relative w-32 h-16 flex items-center justify-center" style={{ transform: 'rotate(-15deg)' }}>
+          <div className="border-2 border-red-500 px-2 py-2 text-xs font-bold text-red-500 text-center whitespace-nowrap">
+            CONFIDENTIAL
+          </div>
         </div>
       </div>
     ),
