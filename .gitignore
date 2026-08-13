@@ -2,6 +2,8 @@
 node_modules/
 .pnp
 .pnp.js
+package-lock.json
+yarn.lock
 
 # Environment
 .env
@@ -30,3 +32,5 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+*.swp
+*.swo
