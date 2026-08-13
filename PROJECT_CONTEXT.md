@@ -530,6 +530,12 @@ links, toggles and status — use `variant="accent"` if you need a blue button.
 **Elevation:** `shadow-small`, `shadow-medium`. **Radii:** `rounded-sm` (6px),
 `rounded-md` (8px), `rounded-lg` (12px).
 
+> **Squashed CTAs in Figma.** The Position / Department / Branch frames contain
+> `Button / Text` instances that were accidentally resized — 19.7px, 23.1px and
+> similar heights inside a 32px toolbar, with fractional widths and clipped
+> labels. They are layout accidents, not a spec. Render CTAs at the component's
+> real 32px `size="sm"`; do not reproduce the clipping.
+
 > The Figma file contains two generations of the token library. Some frames show
 > literal fallbacks from the older set (e.g. `#5b6778` for `fg/subtle`), but the
 > **bound variables** resolve to the values above — those are what the app uses.
