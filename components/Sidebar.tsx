@@ -2,26 +2,38 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, Home, Users, Shield, Stamp, Clock, FileText } from 'lucide-react';
+import { ChevronDown, Home, Users, Shield, Stamp, Clock, FileText, CreditCard, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 interface SidebarProps {
-  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo' | 'document-category';
+  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo' | 'document-category' | 'reminder' | 'document-handover' | 'admins' | 'contacts' | 'groups' | 'billing' | 'payment-history' | 'reports';
 }
 
 export function Sidebar({ activePage }: SidebarProps) {
   const pathname = usePathname();
 
-  const navItems = [
+  const generalItems = [
     { label: 'Overview', icon: Home, href: '/', id: 'overview' },
     { label: 'User and role', icon: Users, href: '/user-and-role', id: 'user-and-role' },
     { label: 'Enterprise seal', icon: Shield, href: '/enterprise-seal', id: 'enterprise-seal' },
     { label: 'Enterprise stamp', icon: Stamp, href: '/enterprise-stamp', id: 'enterprise-stamp' },
-    { label: 'Reminder', icon: Clock, href: '#', id: 'reminder' },
+    { label: 'Reminder', icon: Clock, href: '/reminder', id: 'reminder' },
     { label: 'Email logo', icon: FileText, href: '/email-logo', id: 'email-logo' },
-    { label: 'Document handover', icon: FileText, href: '#', id: 'doc-handover' },
-    { label: 'Document category', icon: FileText, href: '/document-category', id: 'doc-category' },
+    { label: 'Document handover', icon: FileText, href: '/document-handover', id: 'document-handover' },
+    { label: 'Document category', icon: FileText, href: '/document-category', id: 'document-category' },
+  ];
+
+  const userManagementItems = [
+    { label: 'Admins', icon: Shield, href: '/admins', id: 'admins' },
+    { label: 'Contacts', icon: Users, href: '/contacts', id: 'contacts' },
+    { label: 'Groups', icon: Users, href: '/groups', id: 'groups' },
+  ];
+
+  const otherItems = [
+    { label: 'Billing', icon: CreditCard, href: '/billing', id: 'billing' },
+    { label: 'Payment history', icon: CreditCard, href: '/payment-history', id: 'payment-history' },
+    { label: 'Reports', icon: BarChart3, href: '/reports', id: 'reports' },
   ];
 
   const isActive = (id: string) => {
@@ -30,7 +42,15 @@ export function Sidebar({ activePage }: SidebarProps) {
     if (id === 'enterprise-seal' && pathname === '/enterprise-seal') return true;
     if (id === 'enterprise-stamp' && pathname === '/enterprise-stamp') return true;
     if (id === 'email-logo' && pathname === '/email-logo') return true;
-    if (id === 'doc-category' && pathname === '/document-category') return true;
+    if (id === 'document-category' && pathname === '/document-category') return true;
+    if (id === 'reminder' && pathname === '/reminder') return true;
+    if (id === 'document-handover' && pathname === '/document-handover') return true;
+    if (id === 'admins' && pathname === '/admins') return true;
+    if (id === 'contacts' && pathname === '/contacts') return true;
+    if (id === 'groups' && pathname === '/groups') return true;
+    if (id === 'billing' && pathname === '/billing') return true;
+    if (id === 'payment-history' && pathname === '/payment-history') return true;
+    if (id === 'reports' && pathname === '/reports') return true;
     return false;
   };
 
@@ -49,7 +69,57 @@ export function Sidebar({ activePage }: SidebarProps) {
       <div className="flex flex-col gap-4 w-full mb-6">
         <p className="px-3 text-xs font-bold uppercase text-muted-foreground">General</p>
         <div className="flex flex-col gap-0">
-          {navItems.slice(0, 8).map((item) => {
+          {generalItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.id);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`flex items-center gap-3 px-3 py-2.5 h-11 rounded-lg text-sm font-normal transition-colors ${
+                  active
+                    ? 'bg-muted text-foreground border-l-3 border-blue-600'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Icon className="h-5 w-5 flex-shrink-0" />
+                <span className="flex-1 text-left">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* User Management Section */}
+      <div className="flex flex-col gap-4 w-full mb-6">
+        <p className="px-3 text-xs font-bold uppercase text-muted-foreground">User Management</p>
+        <div className="flex flex-col gap-0">
+          {userManagementItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.id);
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`flex items-center gap-3 px-3 py-2.5 h-11 rounded-lg text-sm font-normal transition-colors ${
+                  active
+                    ? 'bg-muted text-foreground border-l-3 border-blue-600'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Icon className="h-5 w-5 flex-shrink-0" />
+                <span className="flex-1 text-left">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Other Section */}
+      <div className="flex flex-col gap-4 w-full mb-6">
+        <p className="px-3 text-xs font-bold uppercase text-muted-foreground">Other</p>
+        <div className="flex flex-col gap-0">
+          {otherItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.id);
             return (
