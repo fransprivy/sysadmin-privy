@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, Settings, Bell, User, Home, Users, Shield, Clock, FileText, Stamp, Download, File, CheckCircle } from 'lucide-react';
+import { ChevronDown, Settings, Bell, Home, Users, Shield, Clock, FileText, Stamp, Download, File, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Sidebar } from '@/components/Sidebar';
 
 // TODO: Replace these URLs with your own assets
 // These Figma asset URLs expire in 7 days. Options:
@@ -71,98 +72,6 @@ function ActivityCard({ icon, label, value, isBadge }: ActivityCardProps) {
   );
 }
 
-interface SidebarSectionProps {
-  title: string;
-  items: Array<{ label: string; icon: React.ReactNode; active?: boolean }>;
-}
-
-function SidebarSection({ title, items }: SidebarSectionProps) {
-  return (
-    <div className="flex flex-col gap-4 w-full">
-      <p className="px-3 text-xs font-bold uppercase text-muted-foreground">{title}</p>
-      <div className="flex flex-col gap-0">
-        {items.map((item, idx) => (
-          <button
-            key={idx}
-            className={`flex items-center gap-3 px-3 py-2.5 h-11 rounded-lg text-sm font-normal transition-colors ${
-              item.active
-                ? 'bg-muted text-foreground border-l-3 border-blue-600'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <div className="flex-shrink-0">{item.icon}</div>
-            <span className="flex-1 text-left">{item.label}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Sidebar() {
-  return (
-    <div className="w-72 border-r border-border bg-background flex flex-col h-screen fixed left-0 top-16 pt-6 px-7 overflow-y-auto">
-      {/* Enterprise Account Section */}
-      <div className="flex flex-col gap-4 mb-6 pb-6 border-b border-border">
-        <p className="text-xs font-bold uppercase text-muted-foreground">Enterprise account</p>
-        <Button variant="outline" className="w-full justify-center">
-          <span className="text-sm">PT. Privy Identitas...</span>
-          <ChevronDown className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* General Section */}
-      <SidebarSection
-        title="General"
-        items={[
-          { label: 'Overview', icon: <Home className="h-5 w-5" />, active: true },
-          { label: 'User and role', icon: <Users className="h-5 w-5" /> },
-          { label: 'Enterprise seal', icon: <Shield className="h-5 w-5" /> },
-          { label: 'Enterprise stamp', icon: <Stamp className="h-5 w-5" /> },
-          { label: 'Reminder', icon: <Clock className="h-5 w-5" /> },
-          { label: 'Email logo', icon: <FileText className="h-5 w-5" /> },
-          { label: 'Document handover', icon: <FileText className="h-5 w-5" /> },
-          { label: 'Document category', icon: <FileText className="h-5 w-5" /> },
-        ]}
-      />
-
-      {/* User Management Section */}
-      <SidebarSection
-        title="User Management"
-        items={[
-          { label: 'Admins', icon: <Users className="h-5 w-5" /> },
-          { label: 'Contacts', icon: <User className="h-5 w-5" /> },
-          { label: 'Groups', icon: <Users className="h-5 w-5" /> },
-        ]}
-      />
-
-      {/* Other Section */}
-      <SidebarSection
-        title="Other"
-        items={[
-          { label: 'Billing', icon: <FileText className="h-5 w-5" /> },
-          { label: 'Payment history', icon: <FileText className="h-5 w-5" /> },
-          { label: 'Reports', icon: <FileText className="h-5 w-5" /> },
-        ]}
-      />
-
-      {/* Plan Status Card - Sticky at bottom */}
-      <div className="mt-auto pt-6 border-t border-border">
-        <Card className="p-4">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              <p className="text-xs font-normal text-muted-foreground">Enterprise Plan</p>
-              <p className="text-lg font-semibold text-blue-600">Active</p>
-            </div>
-            <div className="rounded-md bg-blue-50 px-3 py-1.5">
-              <p className="text-xs font-normal text-blue-700">Until Apr 04, 2024</p>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
 
 function Topbar() {
   return (
@@ -200,7 +109,7 @@ export default function AdminCenterPage() {
   return (
     <div className="flex h-screen bg-background">
       <Topbar />
-      <Sidebar />
+      <Sidebar activePage="overview" />
 
       {/* Main Content */}
       <main className="ml-72 mt-16 flex-1 overflow-auto">

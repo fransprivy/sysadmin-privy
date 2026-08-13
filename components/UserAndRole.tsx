@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, Settings, Bell, User, Home, Users, Shield, Clock, FileText, Download, Search, MoreVertical } from 'lucide-react';
+import { Settings, Bell, Download, Search, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Sidebar } from '@/components/Sidebar';
 
 interface Employee {
   id: string;
@@ -112,58 +112,6 @@ function AvatarBadge({ initials }: { initials: string }) {
   );
 }
 
-function Sidebar() {
-  return (
-    <div className="w-72 border-r border-border bg-background flex flex-col h-screen fixed left-0 top-16 pt-6 px-7 overflow-y-auto">
-      <div className="flex flex-col gap-4 mb-6 pb-6 border-b border-border">
-        <p className="text-xs font-bold uppercase text-muted-foreground">Enterprise account</p>
-        <Button variant="outline" className="w-full justify-center">
-          <span className="text-sm">PT. Privy Identitas...</span>
-          <ChevronDown className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* General Section */}
-      <div className="flex flex-col gap-4 w-full mb-6">
-        <p className="px-3 text-xs font-bold uppercase text-muted-foreground">General</p>
-        <div className="flex flex-col gap-0">
-          {[
-            { label: 'Overview', icon: Home },
-            { label: 'User and role', icon: Users, active: true },
-            { label: 'Enterprise seal', icon: Shield },
-          ].map((item) => (
-            <button
-              key={item.label}
-              className={`flex items-center gap-3 px-3 py-2.5 h-11 rounded-lg text-sm font-normal transition-colors ${
-                item.active
-                  ? 'bg-muted text-foreground border-l-3 border-blue-600'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <item.icon className="h-5 w-5" />
-              <span className="flex-1 text-left">{item.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Plan Status */}
-      <div className="mt-auto pt-6 border-t border-border">
-        <Card className="p-4">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              <p className="text-xs font-normal text-muted-foreground">Enterprise Plan</p>
-              <p className="text-lg font-semibold text-blue-600">Active</p>
-            </div>
-            <div className="rounded-md bg-blue-50 px-3 py-1.5">
-              <p className="text-xs font-normal text-blue-700">Until Apr 04, 2026</p>
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
-  );
-}
 
 function Topbar() {
   return (
@@ -206,7 +154,7 @@ export default function UserAndRolePage() {
   return (
     <div className="flex h-screen bg-background">
       <Topbar />
-      <Sidebar />
+      <Sidebar activePage="user-and-role" />
 
       <main className="ml-72 mt-16 flex-1 overflow-auto">
         {/* Breadcrumbs */}
