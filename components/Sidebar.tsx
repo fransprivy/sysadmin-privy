@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
 interface SidebarProps {
-  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp';
+  activePage?: 'overview' | 'user-and-role' | 'enterprise-seal' | 'enterprise-stamp' | 'email-logo';
 }
 
 export function Sidebar({ activePage }: SidebarProps) {
@@ -19,7 +19,7 @@ export function Sidebar({ activePage }: SidebarProps) {
     { label: 'Enterprise seal', icon: Shield, href: '/enterprise-seal', id: 'enterprise-seal' },
     { label: 'Enterprise stamp', icon: Stamp, href: '/enterprise-stamp', id: 'enterprise-stamp' },
     { label: 'Reminder', icon: Clock, href: '#', id: 'reminder' },
-    { label: 'Email logo', icon: FileText, href: '#', id: 'email-logo' },
+    { label: 'Email logo', icon: FileText, href: '/email-logo', id: 'email-logo' },
     { label: 'Document handover', icon: FileText, href: '#', id: 'doc-handover' },
     { label: 'Document category', icon: FileText, href: '#', id: 'doc-category' },
   ];
@@ -29,6 +29,7 @@ export function Sidebar({ activePage }: SidebarProps) {
     if (id === 'user-and-role' && pathname === '/user-and-role') return true;
     if (id === 'enterprise-seal' && pathname === '/enterprise-seal') return true;
     if (id === 'enterprise-stamp' && pathname === '/enterprise-stamp') return true;
+    if (id === 'email-logo' && pathname === '/email-logo') return true;
     return false;
   };
 
