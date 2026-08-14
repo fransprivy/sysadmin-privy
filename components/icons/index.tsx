@@ -309,6 +309,22 @@ export function StarFilledIcon(props: IconProps) {
   );
 }
 
+export function TabBalanceIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden {...props}>
+      <g clipPath="url(#clip0_0_10930)"> <path fillRule="evenodd" clipRule="evenodd" d="M1.25 17.1864H18.75V18.4364H1.25V17.1864ZM15.8813 5.93643C16.116 5.70197 16.2479 5.38381 16.2479 5.05205C16.2479 4.72029 16.116 4.40214 15.8813 4.16768L13.6438 1.93018C13.4093 1.69546 13.0911 1.56357 12.7594 1.56357C12.4276 1.56357 12.1095 1.69546 11.875 1.93018L2.5 11.3052V15.3114H6.50625L15.8813 5.93643ZM12.7563 2.81143L15 5.05518L13.125 6.93018L10.8813 4.68643L12.7563 2.81143ZM3.75 14.0614V11.8177L10 5.56768L12.2437 7.81143L5.99375 14.0614H3.75Z" fill="currentColor"/> </g> <defs> <clipPath > <rect width="20" height="20" fill="white"/> </clipPath> </defs>
+    </svg>
+  );
+}
+
+export function TabUserLogIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden {...props}>
+      <g clipPath="url(#clip0_0_10871)"> <path fillRule="evenodd" clipRule="evenodd" d="M19.3377 9.7875C17.8352 5.90106 14.164 3.28158 10.0002 3.125C5.83641 3.28158 2.1652 5.90106 0.662722 9.7875C0.613077 9.92482 0.613077 10.0752 0.662722 10.2125C2.1652 14.0989 5.83641 16.7184 10.0002 16.875C14.164 16.7184 17.8352 14.0989 19.3377 10.2125C19.3874 10.0752 19.3874 9.92482 19.3377 9.7875ZM6.25 10C6.25 7.92893 7.92893 6.25 10 6.25C12.0711 6.25 13.75 7.92893 13.75 10C13.75 12.0711 12.0711 13.75 10 13.75C7.92893 13.75 6.25 12.0711 6.25 10ZM7.5 10C7.5 11.3807 8.61929 12.5 10 12.5C10.663 12.5 11.2989 12.2366 11.7678 11.7678C12.2366 11.2989 12.5 10.663 12.5 10C12.5 8.61929 11.3807 7.5 10 7.5C8.61929 7.5 7.5 8.61929 7.5 10ZM1.91897 10C3.18772 13.1687 6.68772 15.625 10.0002 15.625C13.3127 15.625 16.8127 13.1687 18.0815 10C16.8127 6.83125 13.3127 4.375 10.0002 4.375C6.68772 4.375 3.18772 6.83125 1.91897 10Z" fill="currentColor"/> </g> <defs> <clipPath > <rect width="20" height="20" fill="white"/> </clipPath> </defs>
+    </svg>
+  );
+}
+
 export function ToastCheckIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden {...props}>

@@ -25,6 +25,7 @@ const config: Config = {
         'success-fg': 'var(--fg-success)',
         muted: 'var(--fg-muted)',
         'warning-fg': 'var(--fg-warning)',
+        'danger-fg': 'var(--fg-danger)',
 
         // Figma: border/*
         border: 'var(--border-default)',

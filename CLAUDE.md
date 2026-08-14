@@ -50,7 +50,7 @@ Tailwind palette classes** (`text-gray-500`, `bg-blue-600`, …).
 | bg/subtle | `bg-surface-subtle` (`subtle` is taken by the fg colour) |
 | fg/default | `text-foreground` |
 | fg/subtle · fg/subtlest · fg/muted | `text-subtle` · `text-subtlest` · `text-muted` |
-| fg/link · fg/info · fg/success · fg/warning | `text-link` · `text-info-fg` · `text-success-fg` · `text-warning-fg` |
+| fg/link · fg/info · fg/success · fg/warning · fg/danger | `text-link` · `text-info-fg` · `text-success-fg` · `text-warning-fg` · `text-danger-fg` |
 | border/default · border/muted | `border-border` (#dbdbdc) · `border-border-muted` (#e7e7e8) |
 | brand/accent · brand/logo | `text-accent`/`bg-accent` · `bg-logo` |
 | teal/0 · teal/50 | `bg-teal0` · `text-teal50` |
@@ -116,7 +116,7 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
   (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins, Groups,
-  Billing, Payment history.
+  Billing, Payment history, Reports (Balance usage tab).
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.

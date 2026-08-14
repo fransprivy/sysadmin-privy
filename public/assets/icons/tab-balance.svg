@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="constraint" clip-path="url(#clip0_0_10930)">
+<g id="&#60;safe area&#62;" opacity="0">
+</g>
+<path id="Fill" fill-rule="evenodd" clip-rule="evenodd" d="M1.25 17.1864H18.75V18.4364H1.25V17.1864ZM15.8813 5.93643C16.116 5.70197 16.2479 5.38381 16.2479 5.05205C16.2479 4.72029 16.116 4.40214 15.8813 4.16768L13.6438 1.93018C13.4093 1.69546 13.0911 1.56357 12.7594 1.56357C12.4276 1.56357 12.1095 1.69546 11.875 1.93018L2.5 11.3052V15.3114H6.50625L15.8813 5.93643ZM12.7563 2.81143L15 5.05518L13.125 6.93018L10.8813 4.68643L12.7563 2.81143ZM3.75 14.0614V11.8177L10 5.56768L12.2437 7.81143L5.99375 14.0614H3.75Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_0_10930">
+<rect width="20" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg>
