@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ChevronDownSmIcon, SearchIcon } from '@/components/icons';
+import { ChevronDownSmIcon, SearchIcon, SortArrowsIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
 /**
@@ -231,5 +231,31 @@ export function TableToolbar({
         {actions}
       </div>
     </div>
+  );
+}
+
+/** Table Header with the frame's sort affordance (Billing, Payment history). */
+export function SortableHeaderCell({
+  label,
+  active,
+  onClick,
+  className,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <TableHeaderCell className={className}>
+      <button
+        type="button"
+        onClick={onClick}
+        className="flex items-center gap-2 text-p2 font-medium text-subtle transition-colors hover:text-foreground"
+      >
+        {label}
+        <SortArrowsIcon className={cn('size-4 shrink-0', active && 'text-foreground')} />
+      </button>
+    </TableHeaderCell>
   );
 }

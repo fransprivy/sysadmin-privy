@@ -72,7 +72,7 @@ blue button. `variant="default"` is the neutral grey one.
 optional Premium label, description, uploader + 192px tile grid; pass `tiles`).
 `components/user-and-role/shared.tsx`: `Toolbar` (field selector + search + actions),
 `TableToolbar` (title + search + actions, used by Admins/Document category/Groups),
-`TableHeaderCell`, `TableCell`, `TableWrapper`, `CodeBadge`, `NoResults`, `EmptyState`, `CreateButton`.
+`TableHeaderCell`, `SortableHeaderCell`, `TableCell`, `TableWrapper`, `CodeBadge`, `NoResults`, `EmptyState`, `CreateButton`.
 Despite the folder name, the table primitives here are shared across list pages.
 
 Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes from
@@ -116,7 +116,7 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
   (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins, Groups,
-  Billing.
+  Billing, Payment history.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.

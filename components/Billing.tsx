@@ -2,12 +2,17 @@
 
 import { useMemo, useState } from 'react';
 import { AdminLayout } from '@/components/AdminLayout';
-import { ChevronDownIcon, SortArrowsIcon } from '@/components/icons';
+import { ChevronDownIcon } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Pagination } from '@/components/ui/pagination';
 import { RowMenu } from '@/components/ui/row-menu';
 import { Toast } from '@/components/ui/toast';
-import { TableCell, TableHeaderCell, TableToolbar } from '@/components/user-and-role/shared';
+import {
+  SortableHeaderCell,
+  TableCell,
+  TableHeaderCell,
+  TableToolbar,
+} from '@/components/user-and-role/shared';
 
 type Status = 'Unpaid' | 'Paid' | 'Expired';
 
@@ -44,32 +49,6 @@ const INVOICES: Invoice[] = STATUSES.map((status, index) => ({
 const TOTAL_PAGES_IN_FRAME = 10;
 
 type SortKey = 'billingDate' | 'dueDate';
-
-/** Table Header with the frame's sort affordance. */
-function SortableHeader({
-  label,
-  active,
-  onClick,
-  className,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  className?: string;
-}) {
-  return (
-    <TableHeaderCell className={className}>
-      <button
-        type="button"
-        onClick={onClick}
-        className="flex items-center gap-2 text-p2 font-medium text-subtle transition-colors hover:text-foreground"
-      >
-        {label}
-        <SortArrowsIcon className={`size-4 shrink-0 ${active ? 'text-foreground' : ''}`} />
-      </button>
-    </TableHeaderCell>
-  );
-}
 
 export default function BillingPage() {
   const [query, setQuery] = useState('');
@@ -143,14 +122,14 @@ export default function BillingPage() {
         <table className="w-full min-w-[860px] table-fixed border-collapse">
           <thead>
             <tr>
-              <SortableHeader
+              <SortableHeaderCell
                 label="Billing date"
                 className="w-[159px]"
                 active={sort.key === 'billingDate'}
                 onClick={() => toggleSort('billingDate')}
               />
               <TableHeaderCell>Invoice number</TableHeaderCell>
-              <SortableHeader
+              <SortableHeaderCell
                 label="Billing due date"
                 className="w-[159px]"
                 active={sort.key === 'dueDate'}
