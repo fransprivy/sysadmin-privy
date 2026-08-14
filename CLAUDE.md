@@ -67,7 +67,7 @@ blue button. `variant="default"` is the neutral grey one.
 
 `components/`: `AdminLayout` (+`AdminSection`), `Topbar`, `Sidebar`, `Breadcrumbs`, `icons/` (generated).
 `components/ui/`: `button` `card` `badge` `avatar` (initials fallback) `checkbox` `toast` `row-menu` (Edit/Delete)
-`privy-logo` (4 brand lockups) `asset-library` (**the whole Enterprise seal/stamp page** — title,
+`privy-logo` (4 brand lockups) `toggle` `asset-library` (**the whole Enterprise seal/stamp page** — title,
 optional Premium label, description, uploader + 192px tile grid; pass `tiles`).
 `components/user-and-role/shared.tsx`: `Toolbar` (field selector + search + actions),
 `TableHeaderCell`, `TableCell`, `TableWrapper`, `CodeBadge`, `NoResults`, `EmptyState`, `CreateButton`.
@@ -104,7 +104,7 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
 ## Repo notes
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
-  (4 tabs), Enterprise seal, Enterprise stamp.
+  (4 tabs), Enterprise seal, Enterprise stamp, Email logo.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.

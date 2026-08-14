@@ -1,116 +1,142 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Upload } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { useRef, useState } from 'react';
+import { Pencil } from 'lucide-react';
 import { AdminLayout } from '@/components/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Toast } from '@/components/ui/toast';
+import { Toggle } from '@/components/ui/toggle';
 
-export default function EmailLogoPage() {
-  const [isEnabled, setIsEnabled] = useState(true);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+const MAX_UPLOAD_KB = 300;
+const LOGO = '/assets/email/line-logo.png';
 
-    return (
-    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Email logo' }]}>
-      {/* Page Content */}
-      <div className="space-y-8">
-        {/* Header with Toggle */}
-        <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <h1 className="text-h6 font-bold text-foreground">Email logo</h1>
-            <p className="text-p2 text-subtle">
-              Turn this on to use your customized enterprise logo
+/**
+ * The logo asset is an 800x600 export with the mark inset in whitespace, so both
+ * places it appears crop into it with the frame's own offsets.
+ */
+function CroppedLogo({
+  className,
+  imageStyle,
+  blend,
+}: {
+  className: string;
+  imageStyle: React.CSSProperties;
+  blend?: boolean;
+}) {
+  return (
+    <span className={`relative block overflow-hidden ${className}`}>
+      <img
+        src={LOGO}
+        alt=""
+        className={`absolute max-w-none ${blend ? 'mix-blend-multiply' : ''}`}
+        style={imageStyle}
+      />
+    </span>
+  );
+}
+
+/** The email mock inside the Preview panel — its own visual language, not the app's. */
+function EmailPreview() {
+  return (
+    <div className="flex h-[1010px] w-full items-start rounded-lg border border-border bg-bg-alpha p-6">
+      <div className="flex h-full min-w-0 flex-1 flex-col bg-background">
+        <div className="flex min-h-0 w-full flex-1 flex-col gap-6 px-16 pb-10 pt-8">
+          <CroppedLogo
+            className="h-[66px] w-[92px]"
+            blend
+            imageStyle={{ height: '184.05%', width: '177.78%', left: '-38.89%', top: '-42.02%' }}
+          />
+          <div className="flex w-full flex-col pr-40">
+            <p className="w-full text-h6 font-medium text-foreground">
+              My Company - You’ve received a document to be signed
             </p>
           </div>
-          {/* Toggle Switch */}
-          <button
-            onClick={() => setIsEnabled(!isEnabled)}
-            className={`relative inline-flex h-8 w-14 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-              isEnabled ? 'bg-accent' : 'bg-border'
-            }`}
-          >
-            <span
-              className={`pointer-events-none inline-block h-7 w-7 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                isEnabled ? 'translate-x-6' : 'translate-x-0'
-              }`}
-            />
-          </button>
-        </div>
-
-        {/* Logo Upload Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <Card className="h-48 flex flex-col items-center justify-center p-6">
-              {logoPreview ? (
-                <img src={logoPreview} alt="Logo preview" className="max-h-full max-w-full object-contain" />
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <svg viewBox="0 0 100 100" className="w-24 h-24">
-                    <g transform="translate(50, 50)">
-                      {/* P/Checkmark logo */}
-                      <path
-                        d="M -20 -15 Q -15 -25, 0 -25 Q 15 -25, 15 -10 Q 15, 5, 0, 5 L -5, 5 L -5, 20 M -5, -5 L 10, 10"
-                        stroke="#EF4444"
-                        strokeWidth="3"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </g>
-                  </svg>
-                </div>
-              )}
-            </Card>
-            <Button className="w-full bg-red40 hover:bg-logo text-white">
-              <Upload className="h-4 w-4 mr-2" />
-              Change logo
-            </Button>
-            <p className="text-caption1 text-subtle">File size up to 300KB</p>
-          </div>
-
-          {/* Email Preview Section */}
-          <div className="space-y-3">
-            <h3 className="text-p2 font-medium text-foreground">Preview</h3>
-            <Card className="overflow-hidden">
-              <div className="bg-bg-alpha p-6 space-y-4">
-                {/* Email Header with Logo */}
-                <div className="flex justify-center pb-4 border-b border-border">
-                  <svg viewBox="0 0 100 100" className="w-12 h-12">
-                    <g transform="translate(50, 50)">
-                      <path
-                        d="M -20 -15 Q -15 -25, 0 -25 Q 15 -25, 15 -10 Q 15, 5, 0, 5 L -5, 5 L -5, 20 M -5, -5 L 10, 10"
-                        stroke="#EF4444"
-                        strokeWidth="3"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </g>
-                  </svg>
-                </div>
-
-                {/* Email Content */}
-                <div className="space-y-3">
-                  <p className="text-p2 font-medium text-foreground">
-                    My Company - You've received a document to be signed
-                  </p>
-                  <p className="text-caption1 text-subtle">Hi Mr. Signer,</p>
-                  <p className="text-caption1 text-subtle leading-relaxed">
-                    You receive a important Agreement document from MyCompany to be signed. Click the button below to view and sign the document.
-                  </p>
-                </div>
-
-                {/* CTA Button */}
-                <div className="pt-4">
-                  <Button className="w-full bg-red40 hover:bg-logo text-white text-p2">
-                    View document
-                  </Button>
-                </div>
-              </div>
-            </Card>
+          <div className="flex w-full flex-col gap-6">
+            <p className="w-full text-p2 text-subtlest">Hi Mr. Signer,</p>
+            <p className="w-full text-p2 text-subtlest">
+              You receive a Important Agreement document from MyCompany to be signed. Click the
+              button below to view and sign the document.
+            </p>
+            <div className="flex w-full flex-col items-center justify-center p-2">
+              {/* Email-template chrome: its own red and type, deliberately not the app button */}
+              <span className="flex flex-col items-center justify-center rounded-md bg-[#c43330] px-8 py-3">
+                <span className="whitespace-nowrap text-p2 font-medium text-white">
+                  View document
+                </span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export default function EmailLogoPage() {
+  const [enabled, setEnabled] = useState(true);
+  const [toast, setToast] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = (file?: File) => {
+    if (!file) return;
+    if (file.size > MAX_UPLOAD_KB * 1024) {
+      setToast(`“${file.name}” is larger than ${MAX_UPLOAD_KB}KB`);
+      return;
+    }
+    setToast('Logo updated');
+  };
+
+  return (
+    <AdminLayout
+      trail={[
+        { label: 'PrivySign', href: '#' },
+        { label: 'Admin Center', href: '/' },
+        { label: 'Email logo' },
+      ]}
+    >
+      <div className="flex w-full flex-col gap-12">
+        <section className="flex w-full flex-col gap-5">
+          <div className="flex w-full items-center gap-5">
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <h1 className="w-full text-h6 font-medium text-foreground">Email logo</h1>
+              <p className="w-full text-p2 text-subtle">
+                Turn this on to use your customized enterprise logo
+              </p>
+            </div>
+            <Toggle checked={enabled} onChange={setEnabled} label="Use customized enterprise logo" />
+          </div>
+
+          {/* Logo — 192px card */}
+          <div className="flex size-48 shrink-0 flex-col items-center justify-center rounded-lg border border-border p-1">
+            <CroppedLogo
+              className="h-full w-full rounded-[5px]"
+              imageStyle={{ height: '150.49%', width: '204.32%', left: '-49.53%', top: '-25.73%' }}
+            />
+          </div>
+
+          <div className="flex w-48 flex-col gap-3">
+            <input
+              ref={inputRef}
+              type="file"
+              accept="image/jpeg,image/png"
+              className="sr-only"
+              onChange={(event) => handleFile(event.target.files?.[0])}
+            />
+            <Button variant="primary" onClick={() => inputRef.current?.click()}>
+              <Pencil className="size-4 shrink-0" />
+              Change logo
+            </Button>
+            <p className="w-full text-p2 text-subtlest">File size up to {MAX_UPLOAD_KB}KB</p>
+          </div>
+        </section>
+
+        <section className="flex w-full flex-col gap-5">
+          <p className="whitespace-nowrap text-p1 font-medium text-foreground">Preview</p>
+          <EmailPreview />
+        </section>
+      </div>
+
+      <Toast message={toast ?? ''} open={toast !== null} onDismiss={() => setToast(null)} />
     </AdminLayout>
   );
 }
