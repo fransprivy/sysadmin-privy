@@ -11,9 +11,10 @@ import glob, os, re
 SRC, OUT = 'public/assets/icons', 'components/icons/index.tsx'
 
 # Figma's greys for single-colour icons; swapped for currentColor.
-MONO_FILLS = ('#6E7074', '#AAACAE')
+MONO_FILLS = ('#6E7074', '#AAACAE', '#0D1117', 'black')
 # Prefixes/names that are multicolour and must keep their fills.
-COLOUR_NAMES = {'verified', 'info', 'toast-check', 'diamond', 'image-upload'}
+COLOUR_NAMES = {'verified', 'info', 'toast-check', 'diamond', 'image-upload',
+                'star-filled', 'star-empty'}
 COLOUR_PREFIXES = ('act-',)
 
 # Brand artwork is consumed as <img> by Topbar / ui/privy-logo.tsx, not as icon
