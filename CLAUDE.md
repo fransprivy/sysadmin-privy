@@ -66,7 +66,9 @@ blue button. `variant="default"` is the neutral grey one.
 ## Component inventory — reuse, don't rebuild
 
 `components/`: `AdminLayout` (+`AdminSection`), `Topbar`, `Sidebar`, `Breadcrumbs`, `icons/` (generated).
-`components/ui/`: `button` `card` `badge` `avatar` (initials fallback) `checkbox` `toast` `row-menu` (Edit/Delete) `privy-logo`.
+`components/ui/`: `button` `card` `badge` `avatar` (initials fallback) `checkbox` `toast` `row-menu` (Edit/Delete)
+`privy-logo` (4 brand lockups) `asset-library` (**the whole Enterprise seal/stamp page** — title,
+optional Premium label, description, uploader + 192px tile grid; pass `tiles`).
 `components/user-and-role/shared.tsx`: `Toolbar` (field selector + search + actions),
 `TableHeaderCell`, `TableCell`, `TableWrapper`, `CodeBadge`, `NoResults`, `EmptyState`, `CreateButton`.
 
@@ -80,25 +82,29 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
 2. **Layered SVGs need wrapper divs.** An absolutely positioned `<img>` is a replaced element:
    it takes its intrinsic size and ignores the opposing offset, so artwork renders clipped.
    Put the inset on a wrapper `div`, let the image fill it. See `ui/privy-logo.tsx`.
-3. **Squashed CTAs in Figma are accidents.** Several frames contain `Button / Text` instances
+3. **Tailwind preflight caps images.** `img { max-width: 100% }` silently shrinks artwork
+   the frame deliberately overflows past its container's padding (stamp tiles rendered
+   142px instead of 148px). Add `max-w-none` — and `shrink-0` inside a flex tile.
+4. **Squashed CTAs in Figma are accidents.** Several frames contain `Button / Text` instances
    resized to 19–23px tall inside a 32px bar with fractional widths and clipped labels.
    Render at the real 32px `size="sm"`. Check the instance height before copying a button.
-4. **Avatar/person images export blank** (172-byte transparent PNGs) — they're placeholder fills
+5. **Avatar/person images export blank** (172-byte transparent PNGs) — they're placeholder fills
    bound to empty `person/*` variables. Use `<Avatar>` (initials fallback), don't commit them.
-5. **Two token generations in the file.** Some frames show literal fallbacks from an older set
+6. **Two token generations in the file.** Some frames show literal fallbacks from an older set
    (`#5b6778` for fg/subtle, `#1f2329` for fg/default). The **bound variables** resolve to the
    values above — trust `get_variable_defs`, not the literals in the generated code.
-6. **Toasts are anchored 30px from the viewport's bottom-left in the frames**, which lands them
+7. **Toasts are anchored 30px from the viewport's bottom-left in the frames**, which lands them
    on top of the sidebar. `ui/toast.tsx` offsets past the sidebar.
-7. **Consistency beats per-frame fidelity** when frames disagree by a few px. Tabs of one page
+8. **Consistency beats per-frame fidelity** when frames disagree by a few px. Tabs of one page
    must not shift when switching. Say so in the commit message when you deviate.
-8. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
+9. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
    from the vector assets instead of exporting a PNG.
-9. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
+10. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
 
 ## Repo notes
 
-- `main` is the working branch. Merged PRs #1–#3 built Overview, User and role (4 tabs), Enterprise seal.
+- `main` is the working branch; commit straight to it. Built so far: Overview, User and role
+  (4 tabs), Enterprise seal, Enterprise stamp.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.
