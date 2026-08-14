@@ -1,86 +1,143 @@
 'use client';
 
-import React from 'react';
-import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { useMemo, useState } from 'react';
 import { AdminLayout } from '@/components/AdminLayout';
+import { GroupAvatarIcon, RecipientsIcon } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Pagination } from '@/components/ui/pagination';
+import { RowMenu } from '@/components/ui/row-menu';
+import { Toast } from '@/components/ui/toast';
+import { TableCell, TableHeaderCell, TableToolbar } from '@/components/user-and-role/shared';
+
+const SEARCH_FIELDS = ['Group name', 'Short name'] as const;
+
+interface Group {
+  id: string;
+  name: string;
+  shortName: string;
+  recipients: number;
+}
+
+/** The frame repeats one row twelve times; ids keep them addressable. */
+const GROUPS: Group[] = Array.from({ length: 12 }, (_, index) => ({
+  id: `group-${index + 1}`,
+  name: 'Human Resource',
+  shortName: 'HR',
+  recipients: 12,
+}));
+
+/** The frame shows "Page 1 of 10" against a single page of rows. */
+const TOTAL_PAGES_IN_FRAME = 10;
 
 export default function GroupsPage() {
-  const groups = [
-    {
-      id: 1,
-      name: 'Finance Team',
-      members: 5,
-      description: 'Finance department members',
-      created: '2023-01-15',
-    },
-    {
-      id: 2,
-      name: 'HR Department',
-      members: 3,
-      description: 'Human Resources team',
-      created: '2023-03-20',
-    },
-    {
-      id: 3,
-      name: 'Legal Team',
-      members: 4,
-      description: 'Legal and compliance',
-      created: '2023-05-10',
-    },
-  ];
+  const [field, setField] = useState<string>('Group name');
+  const [query, setQuery] = useState('');
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [page, setPage] = useState(1);
+  const [toast, setToast] = useState<string | null>(null);
 
-    return (
-    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Groups' }]} width="wide">
-      {/* Page Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-h6 font-medium mb-2 text-foreground">Groups</h1>
-            <p className="text-subtle">Manage user groups and team assignments</p>
-          </div>
-          <Button>+ Create Group</Button>
-        </div>
+  const filtered = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    if (!term) return GROUPS;
+    const key = field === 'Short name' ? 'shortName' : 'name';
+    return GROUPS.filter((group) => group[key].toLowerCase().includes(term));
+  }, [field, query]);
 
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-subtle" />
-            <input
-              type="text"
-              placeholder="Search groups..."
-              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
-        </div>
+  const pageCount = Math.max(
+    query ? Math.ceil(filtered.length / rowsPerPage) : TOTAL_PAGES_IN_FRAME,
+    1
+  );
+  const rows = filtered.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-        {/* Table */}
-        <Card className="overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-bg-alpha border-b border-border">
-              <tr>
-                <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Name</th>
-                <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Description</th>
-                <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Members</th>
-                <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Created</th>
-                <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Actions</th>
+  return (
+    <AdminLayout
+      trail={[
+        { label: 'PrivySign', href: '#' },
+        { label: 'Admin Center', href: '/' },
+        { label: 'Groups' },
+      ]}
+      width="bleed"
+    >
+      <TableToolbar
+        title="Groups"
+        fields={SEARCH_FIELDS}
+        field={field}
+        onFieldChange={setField}
+        query={query}
+        onQueryChange={(value) => {
+          setQuery(value);
+          setPage(1);
+        }}
+        searchWidth="w-[387px]"
+        actions={
+          <Button variant="primary" size="sm" onClick={() => setToast('Group created')}>
+            Create group
+          </Button>
+        }
+      />
+
+      <div className="overflow-x-auto px-5">
+        <table className="w-full min-w-[860px] table-fixed border-collapse">
+          <thead>
+            <tr>
+              <TableHeaderCell>Group name</TableHeaderCell>
+              <TableHeaderCell className="w-[164px]">Short name</TableHeaderCell>
+              <TableHeaderCell className="w-[140px]">Recipient</TableHeaderCell>
+              <TableHeaderCell className="w-[56px]" srOnly="Actions" />
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((group) => (
+              <tr key={group.id}>
+                <TableCell>
+                  <div className="flex h-10 items-center gap-2">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-border-muted text-subtle">
+                      <GroupAvatarIcon className="size-5" />
+                    </span>
+                    <p className="truncate text-p2 text-foreground">{group.name}</p>
+                  </div>
+                </TableCell>
+                <TableCell className="text-p2 text-foreground">{group.shortName}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <RecipientsIcon className="size-4 shrink-0 text-subtle" />
+                    <p className="text-p2 text-foreground">{group.recipients}</p>
+                  </div>
+                </TableCell>
+                <TableCell className="text-center">
+                  <RowMenu
+                    label={`Actions for ${group.name}`}
+                    items={[
+                      { label: 'Edit group', icon: 'edit' },
+                      { label: 'Delete group', icon: 'delete' },
+                    ]}
+                  />
+                </TableCell>
               </tr>
-            </thead>
-            <tbody>
-              {groups.map((group) => (
-                <tr key={group.id} className="border-b border-border hover:bg-bg-alpha transition-colors">
-                  <td className="px-6 py-4 text-foreground font-medium">{group.name}</td>
-                  <td className="px-6 py-4 text-foreground">{group.description}</td>
-                  <td className="px-6 py-4 text-foreground">{group.members}</td>
-                  <td className="px-6 py-4 text-foreground">{group.created}</td>
-                  <td className="px-6 py-4">
-                    <Button variant="ghost" size="sm">Edit</Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
+            ))}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={4} className="px-3 py-12 text-center text-p2 text-subtle">
+                  No groups match “{query}”.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        rowsPerPage={rowsPerPage}
+        onPageChange={setPage}
+        onRowsPerPageChange={(value) => {
+          setRowsPerPage(value);
+          setPage(1);
+        }}
+      />
+
+      <Toast message={toast ?? ''} open={toast !== null} onDismiss={() => setToast(null)} />
     </AdminLayout>
   );
 }

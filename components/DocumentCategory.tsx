@@ -2,12 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import { AdminLayout } from '@/components/AdminLayout';
-import { SearchIcon, StarEmptyIcon, StarFilledIcon } from '@/components/icons';
+import { StarEmptyIcon, StarFilledIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Pagination } from '@/components/ui/pagination';
 import { RowMenu } from '@/components/ui/row-menu';
 import { Toast } from '@/components/ui/toast';
-import { TableCell, TableHeaderCell } from '@/components/user-and-role/shared';
+import { TableCell, TableHeaderCell, TableToolbar } from '@/components/user-and-role/shared';
 
 interface Category {
   id: string;
@@ -71,28 +71,20 @@ export default function DocumentCategoryPage() {
       ]}
       width="bleed"
     >
-      {/* Header row */}
-      <div className="flex flex-wrap items-start gap-[18px] px-5 pb-3 pt-6">
-        <p className="flex-1 text-h6 font-medium text-foreground">Document category</p>
-        <div className="flex items-start gap-[18px]">
-          <div className="flex w-[301px] max-w-full items-center gap-2 rounded-md border border-border-muted bg-background px-2 py-1">
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setPage(1);
-              }}
-              placeholder="Search by name"
-              className="min-w-0 flex-1 bg-transparent text-p1 text-foreground outline-none placeholder:text-subtlest"
-            />
-            <SearchIcon className="size-4 shrink-0 text-subtlest" />
-          </div>
+      <TableToolbar
+        title="Document category"
+        placeholder="Search by name"
+        query={query}
+        onQueryChange={(value) => {
+          setQuery(value);
+          setPage(1);
+        }}
+        actions={
           <Button variant="primary" size="sm" onClick={() => setToast('Category created')}>
             Add category
           </Button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Table */}
       <div className="overflow-x-auto px-5">

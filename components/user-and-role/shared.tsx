@@ -157,3 +157,75 @@ export function EmptyState({
     </div>
   );
 }
+
+/**
+ * Header row for the list pages: title, search (optionally with a field
+ * selector) and the page's actions. Admins, Document category and Groups all
+ * use it; the frames vary the outer padding by a few px, so it is pinned to the
+ * table's own 20px inset to keep the pages aligned with each other.
+ */
+export function TableToolbar({
+  title,
+  fields,
+  field,
+  onFieldChange,
+  query,
+  onQueryChange,
+  placeholder = 'Search',
+  searchWidth = 'w-[301px]',
+  actions,
+}: {
+  title: string;
+  fields?: readonly string[];
+  field?: string;
+  onFieldChange?: (field: string) => void;
+  query: string;
+  onQueryChange: (query: string) => void;
+  placeholder?: string;
+  searchWidth?: string;
+  actions?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-start gap-[18px] px-5 pb-3 pt-6">
+      <p className="flex-1 text-h6 font-medium text-foreground">{title}</p>
+      <div className="flex items-start gap-[18px]">
+        <div
+          className={cn(
+            'flex max-w-full items-stretch rounded-md border border-border-muted bg-background',
+            searchWidth
+          )}
+        >
+          {fields && field && onFieldChange && (
+            <label className="relative flex min-w-[124px] shrink-0 items-center gap-2 rounded-[7px] px-2 py-1">
+              <select
+                aria-label="Search field"
+                value={field}
+                onChange={(event) => onFieldChange(event.target.value)}
+                className="absolute inset-0 cursor-pointer opacity-0"
+              >
+                {fields.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              <span className="flex-1 whitespace-nowrap text-p1 text-foreground">{field}</span>
+              <ChevronDownSmIcon className="size-4 shrink-0 text-subtle" />
+            </label>
+          )}
+          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-[7px] px-2 py-1">
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => onQueryChange(event.target.value)}
+              placeholder={placeholder}
+              className="min-w-0 flex-1 bg-transparent text-p1 text-foreground outline-none placeholder:text-subtlest"
+            />
+            <SearchIcon className="size-4 shrink-0 text-subtlest" />
+          </div>
+        </div>
+        {actions}
+      </div>
+    </div>
+  );
+}

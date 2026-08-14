@@ -70,7 +70,9 @@ blue button. `variant="default"` is the neutral grey one.
 `privy-logo` (4 brand lockups) `toggle` `pagination` `asset-library` (**the whole Enterprise seal/stamp page** — title,
 optional Premium label, description, uploader + 192px tile grid; pass `tiles`).
 `components/user-and-role/shared.tsx`: `Toolbar` (field selector + search + actions),
+`TableToolbar` (title + search + actions, used by Admins/Document category/Groups),
 `TableHeaderCell`, `TableCell`, `TableWrapper`, `CodeBadge`, `NoResults`, `EmptyState`, `CreateButton`.
+Despite the folder name, the table primitives here are shared across list pages.
 
 Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes from
 `usePathname()`; add `match: ['/detail-route']` for sub-pages.
@@ -99,14 +101,17 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
    on top of the sidebar. `ui/toast.tsx` offsets past the sidebar.
 9. **Consistency beats per-frame fidelity** when frames disagree by a few px. Tabs of one page
    must not shift when switching. Say so in the commit message when you deviate.
-10. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
+10. **Check what an asset actually is before wiring it up.** Figma's layer names lie —
+    `left_icon` on the Groups frame is a kebab, not the group avatar. Open the SVG (or the
+    `--assets` map's data-name) and confirm the glyph matches before committing it.
+11. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
    from the vector assets instead of exporting a PNG.
-11. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
+12. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
 
 ## Repo notes
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
-  (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins.
+  (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins, Groups.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.

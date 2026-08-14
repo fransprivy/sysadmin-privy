@@ -3,13 +3,12 @@
 import { useMemo, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { AdminLayout } from '@/components/AdminLayout';
-import { SearchIcon } from '@/components/icons';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Pagination } from '@/components/ui/pagination';
 import { Toast } from '@/components/ui/toast';
-import { TableCell, TableHeaderCell } from '@/components/user-and-role/shared';
+import { TableCell, TableHeaderCell, TableToolbar } from '@/components/user-and-role/shared';
 
 interface Admin {
   id: string;
@@ -97,27 +96,19 @@ export default function AdminsPage() {
       ]}
       width="bleed"
     >
-      <div className="flex flex-wrap items-start gap-[18px] px-5 pb-3 pt-6">
-        <p className="flex-1 text-h6 font-medium text-foreground">Admins</p>
-        <div className="flex items-start gap-[18px]">
-          <div className="flex w-[301px] max-w-full items-center gap-2 rounded-md border border-border-muted bg-background px-2 py-1">
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setPage(1);
-              }}
-              placeholder="Search"
-              className="min-w-0 flex-1 bg-transparent text-p1 text-foreground outline-none placeholder:text-subtlest"
-            />
-            <SearchIcon className="size-4 shrink-0 text-subtlest" />
-          </div>
+      <TableToolbar
+        title="Admins"
+        query={query}
+        onQueryChange={(value) => {
+          setQuery(value);
+          setPage(1);
+        }}
+        actions={
           <Button variant="primary" size="sm" onClick={() => setToast('Admin invited')}>
             Add admin
           </Button>
-        </div>
-      </div>
+        }
+      />
 
       <div className="overflow-x-auto px-5">
         <table className="w-full min-w-[1000px] table-fixed border-collapse">
