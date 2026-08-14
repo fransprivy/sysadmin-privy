@@ -75,7 +75,7 @@ export default function DocumentCategoryPage() {
       <div className="flex flex-wrap items-start gap-[18px] px-5 pb-3 pt-6">
         <p className="flex-1 text-h6 font-medium text-foreground">Document category</p>
         <div className="flex items-start gap-[18px]">
-          <div className="flex w-[301px] max-w-full items-center gap-2 rounded-md border border-[#e7e7e8] bg-background px-2 py-1">
+          <div className="flex w-[301px] max-w-full items-center gap-2 rounded-md border border-border-muted bg-background px-2 py-1">
             <input
               type="search"
               value={query}

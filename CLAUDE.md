@@ -50,7 +50,7 @@ Tailwind palette classes** (`text-gray-500`, `bg-blue-600`, …).
 | fg/default | `text-foreground` |
 | fg/subtle · fg/subtlest · fg/muted | `text-subtle` · `text-subtlest` · `text-muted` |
 | fg/link · fg/info · fg/success | `text-link` · `text-info-fg` · `text-success-fg` |
-| border/default · border/muted | `border-border` · `border-border-muted` |
+| border/default · border/muted | `border-border` (#dbdbdc) · `border-border-muted` (#e7e7e8) |
 | brand/accent · brand/logo | `text-accent`/`bg-accent` · `bg-logo` |
 | teal/0 · teal/50 | `bg-teal0` · `text-teal50` |
 | blue/green/teal/orange/purple/red 40 | `*-blue40` … `*-red40` |
@@ -90,21 +90,23 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
    Render at the real 32px `size="sm"`. Check the instance height before copying a button.
 5. **Avatar/person images export blank** (172-byte transparent PNGs) — they're placeholder fills
    bound to empty `person/*` variables. Use `<Avatar>` (initials fallback), don't commit them.
-6. **Two token generations in the file.** Some frames show literal fallbacks from an older set
+6. **`border-border-muted` is #e7e7e8** — table row rules, search fields and the rows-per-page
+   select all use it. The Employee frame's older #f4f5f7 is too faint for control borders.
+7. **Two token generations in the file.** Some frames show literal fallbacks from an older set
    (`#5b6778` for fg/subtle, `#1f2329` for fg/default). The **bound variables** resolve to the
    values above — trust `get_variable_defs`, not the literals in the generated code.
-7. **Toasts are anchored 30px from the viewport's bottom-left in the frames**, which lands them
+8. **Toasts are anchored 30px from the viewport's bottom-left in the frames**, which lands them
    on top of the sidebar. `ui/toast.tsx` offsets past the sidebar.
-8. **Consistency beats per-frame fidelity** when frames disagree by a few px. Tabs of one page
+9. **Consistency beats per-frame fidelity** when frames disagree by a few px. Tabs of one page
    must not shift when switching. Say so in the commit message when you deviate.
-9. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
+10. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
    from the vector assets instead of exporting a PNG.
-10. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
+11. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
 
 ## Repo notes
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
-  (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category.
+  (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.

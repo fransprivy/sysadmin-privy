@@ -28,7 +28,7 @@ export function Toolbar({
   return (
     <div className="flex flex-wrap items-center gap-4 px-6 pb-3 pt-6">
       {leading}
-      <div className="flex min-w-[248px] max-w-full items-stretch rounded-md border border-[#e7e7e8] bg-background">
+      <div className="flex min-w-[248px] max-w-full items-stretch rounded-md border border-border-muted bg-background">
         <label className="relative flex min-w-[92px] shrink-0 items-center gap-2 rounded-[7px] px-2 py-1">
           <select
             aria-label="Search field"
