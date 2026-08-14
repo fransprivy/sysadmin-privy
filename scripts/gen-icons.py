@@ -29,13 +29,22 @@ ATTR = {
     'mask-type': 'maskType', 'stroke-dasharray': 'strokeDasharray',
 }
 
-def to_jsx(svg, mono):
+def to_jsx(svg, mono, prefix=''):
     m = re.search(r'<svg[^>]*viewBox="([^"]+)"[^>]*>(.*)</svg>', svg, re.S)
     if not m:
         return None
     view_box, inner = m.group(1), m.group(2)
     inner = re.sub(r'<g id="&#60;safe area&#62;"[^>]*>\s*</g>', '', inner)
-    inner = re.sub(r'\bid="[^"]*"', '', inner)          # ids would collide once inlined
+    # Ids must be namespaced, not stripped: gradients and clip paths are
+    # referenced by url(#id), and bare ids would collide once every icon is
+    # inlined into one module.
+    referenced = set(re.findall(r'url\(#([^)]+)\)', inner)) | set(re.findall(r'(?:clip-path|mask)="url\(#([^)]+)\)"', inner))
+    def rename(match):
+        raw = match.group(1)
+        return f'id="{prefix}-{raw}"' if raw in referenced else ''
+    inner = re.sub(r'\bid="([^"]*)"', rename, inner)
+    for raw in referenced:
+        inner = inner.replace(f'url(#{raw})', f'url(#{prefix}-{raw})')
     if mono:
         for fill in MONO_FILLS:
             inner = inner.replace(f'fill="{fill}"', 'fill="currentColor"')
@@ -66,7 +75,7 @@ def main():
         stem = os.path.basename(path)[:-4]
         if stem.startswith(SKIP_PREFIXES):
             continue
-        parsed = to_jsx(open(path, encoding='utf-8').read(), not is_colour(stem))
+        parsed = to_jsx(open(path, encoding='utf-8').read(), not is_colour(stem), prefix=stem)
         if not parsed:
             print(f'  skipped (no viewBox): {stem}'); continue
         view_box, inner = parsed

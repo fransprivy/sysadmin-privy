@@ -15,6 +15,7 @@ import {
   NavEnterpriseStampIcon,
   NavGroupsIcon,
   NavOverviewIcon,
+  NavPrivypalIcon,
   NavPaymentHistoryIcon,
   NavReminderIcon,
   NavReportsIcon,
@@ -29,6 +30,8 @@ interface NavItem {
   icon: IconComponent;
   /** Extra routes that should keep this item highlighted (detail pages). */
   match?: string[];
+  /** Pill shown at the end of the row, e.g. "New". */
+  badge?: string;
 }
 
 interface NavSection {
@@ -48,8 +51,7 @@ const SECTIONS: NavSection[] = [
       { label: 'Email logo', href: '/email-logo', icon: NavEmailLogoIcon },
       { label: 'Document handover', href: '/document-handover', icon: NavDocumentHandoverIcon },
       { label: 'Document category', href: '/document-category', icon: NavDocumentCategoryIcon },
-      // Not in the Figma frame, but the app ships this page — keeping it reachable.
-      { label: 'PrivyPal', href: '/privypal', icon: NavDocumentCategoryIcon },
+      { label: 'PrivyPal', href: '/privypal', icon: NavPrivypalIcon, badge: 'New' },
     ],
   },
   {
@@ -94,6 +96,11 @@ function NavRow({ item, active }: { item: NavItem; active: boolean }) {
     >
       <Icon className="size-5 shrink-0" />
       <span className="flex-1 whitespace-nowrap">{item.label}</span>
+      {item.badge && (
+        <span className="shrink-0 rounded-full bg-accent px-1.5 py-0.5 text-caption1 font-bold text-white">
+          {item.badge}
+        </span>
+      )}
       {active && (
         <span
           aria-hidden

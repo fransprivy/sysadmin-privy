@@ -75,7 +75,7 @@ optional Premium label, description, uploader + 192px tile grid; pass `tiles`).
 `TableHeaderCell`, `SortableHeaderCell`, `TableCell`, `TableWrapper`, `CodeBadge`, `NoResults`, `EmptyState`, `CreateButton`.
 Despite the folder name, the table primitives here are shared across list pages.
 
-Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes from
+Adding a nav item: append to `SECTIONS` in `Sidebar.tsx` (`badge: 'New'` adds the accent pill). Active state comes from
 `usePathname()`; add `match: ['/detail-route']` for sub-pages.
 
 ## Traps that have already bitten (do not relearn these)
@@ -110,13 +110,16 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
 12. **Tailwind colours share one flat namespace.** `subtle` was already the fg colour, so
     adding a `bg/subtle` surface under the same key silently made `bg-subtle` resolve to the
     dark text grey. Give each role its own key; tsc catches the duplicate, the browser won't.
-13. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
+13. **Gradient icons need namespaced ids.** `gen-icons.py` prefixes every referenced
+    `id` with the icon name instead of stripping it — bare ids collide once inlined, and
+    stripping breaks `url(#…)` so gradients render blank and clip paths silently stop clipping.
+14. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
 
 ## Repo notes
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
   (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins, Groups,
-  Billing, Payment history, Reports (Balance usage tab).
+  Billing, Payment history, Reports (Balance usage tab), PrivyPal.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.
