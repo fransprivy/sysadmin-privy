@@ -11,6 +11,8 @@ const config: Config = {
         'bg-alpha': 'var(--bg-default-alpha)',
         info: 'var(--bg-info)',
         ground: 'var(--bg-ground)',
+        'surface-subtle': 'var(--bg-subtle)',
+        warning: 'var(--bg-warning)',
         success: 'var(--bg-success)',
         inverse: 'var(--bg-inverse)',
 
@@ -22,6 +24,7 @@ const config: Config = {
         'info-fg': 'var(--fg-info)',
         'success-fg': 'var(--fg-success)',
         muted: 'var(--fg-muted)',
+        'warning-fg': 'var(--fg-warning)',
 
         // Figma: border/*
         border: 'var(--border-default)',

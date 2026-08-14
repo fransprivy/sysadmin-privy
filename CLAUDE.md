@@ -46,10 +46,11 @@ Tailwind palette classes** (`text-gray-500`, `bg-blue-600`, …).
 | bg/default · bg/layer1 | `bg-background` |
 | bg/defaultAlpha | `bg-bg-alpha` |
 | bg/ground | `bg-ground` |
-| bg/info · bg/success | `bg-info` · `bg-success` |
+| bg/info · bg/success · bg/warning | `bg-info` · `bg-success` · `bg-warning` |
+| bg/subtle | `bg-surface-subtle` (`subtle` is taken by the fg colour) |
 | fg/default | `text-foreground` |
 | fg/subtle · fg/subtlest · fg/muted | `text-subtle` · `text-subtlest` · `text-muted` |
-| fg/link · fg/info · fg/success | `text-link` · `text-info-fg` · `text-success-fg` |
+| fg/link · fg/info · fg/success · fg/warning | `text-link` · `text-info-fg` · `text-success-fg` · `text-warning-fg` |
 | border/default · border/muted | `border-border` (#dbdbdc) · `border-border-muted` (#e7e7e8) |
 | brand/accent · brand/logo | `text-accent`/`bg-accent` · `bg-logo` |
 | teal/0 · teal/50 | `bg-teal0` · `text-teal50` |
@@ -66,7 +67,7 @@ blue button. `variant="default"` is the neutral grey one.
 ## Component inventory — reuse, don't rebuild
 
 `components/`: `AdminLayout` (+`AdminSection`), `Topbar`, `Sidebar`, `Breadcrumbs`, `icons/` (generated).
-`components/ui/`: `button` `card` `badge` `avatar` (initials fallback) `checkbox` `toast` `row-menu` (Edit/Delete)
+`components/ui/`: `button` `card` `badge` (info/success/warning/subtle/neutral/outline) `avatar` (initials fallback) `checkbox` `toast` `row-menu` (Edit/Delete)
 `privy-logo` (4 brand lockups) `toggle` `pagination` `asset-library` (**the whole Enterprise seal/stamp page** — title,
 optional Premium label, description, uploader + 192px tile grid; pass `tiles`).
 `components/user-and-role/shared.tsx`: `Toolbar` (field selector + search + actions),
@@ -106,12 +107,16 @@ Adding a nav item: append to `SECTIONS` in `Sidebar.tsx`. Active state comes fro
     `--assets` map's data-name) and confirm the glyph matches before committing it.
 11. **Figma raster exports don't upscale** past a node's natural size. For anything small, rebuild
    from the vector assets instead of exporting a PNG.
-12. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
+12. **Tailwind colours share one flat namespace.** `subtle` was already the fg colour, so
+    adding a `bg/subtle` surface under the same key silently made `bg-subtle` resolve to the
+    dark text grey. Give each role its own key; tsc catches the duplicate, the browser won't.
+13. **`next build` clobbers the dev server's `.next`.** Stop the preview first, or `rm -rf .next`.
 
 ## Repo notes
 
 - `main` is the working branch; commit straight to it. Built so far: Overview, User and role
-  (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins, Groups.
+  (4 tabs), Enterprise seal, Enterprise stamp, Email logo, Document category, Admins, Groups,
+  Billing.
 - If `git push` fails with `remote: Internal Server Error` on the ref update, that was a
   transient GitHub incident (Aug 2026). Retry; if it persists, build the ref via the Git Data
   API (blobs → tree → commit → ref) and verify the tree hash matches local.

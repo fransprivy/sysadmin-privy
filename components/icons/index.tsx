@@ -285,6 +285,14 @@ export function SearchIcon(props: IconProps) {
   );
 }
 
+export function SortArrowsIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden {...props}>
+      <g > <g > <path d="M8 1L4 6L12 6L8 1Z" fill="currentColor"/> <path d="M8 15L12 10L4 10L8 15Z" fill="currentColor"/> </g> </g>
+    </svg>
+  );
+}
+
 export function StarEmptyIcon(props: IconProps) {
   return (
     <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden {...props}>

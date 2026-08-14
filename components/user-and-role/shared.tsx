@@ -173,6 +173,7 @@ export function TableToolbar({
   onQueryChange,
   placeholder = 'Search',
   searchWidth = 'w-[301px]',
+  filters,
   actions,
 }: {
   title: string;
@@ -183,12 +184,15 @@ export function TableToolbar({
   onQueryChange: (query: string) => void;
   placeholder?: string;
   searchWidth?: string;
+  /** Standalone controls rendered before the search box (e.g. a status filter). */
+  filters?: React.ReactNode;
   actions?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-wrap items-start gap-[18px] px-5 pb-3 pt-6">
       <p className="flex-1 text-h6 font-medium text-foreground">{title}</p>
       <div className="flex items-start gap-[18px]">
+        {filters}
         <div
           className={cn(
             'flex max-w-full items-stretch rounded-md border border-border-muted bg-background',

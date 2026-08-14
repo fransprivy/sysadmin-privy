@@ -1,72 +1,214 @@
 'use client';
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { useMemo, useState } from 'react';
 import { AdminLayout } from '@/components/AdminLayout';
+import { ChevronDownIcon, SortArrowsIcon } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { Pagination } from '@/components/ui/pagination';
+import { RowMenu } from '@/components/ui/row-menu';
+import { Toast } from '@/components/ui/toast';
+import { TableCell, TableHeaderCell, TableToolbar } from '@/components/user-and-role/shared';
+
+type Status = 'Unpaid' | 'Paid' | 'Expired';
+
+const STATUS_FILTERS = ['All status', 'Unpaid', 'Paid', 'Expired'] as const;
+
+const STATUS_VARIANT: Record<Status, 'warning' | 'success' | 'subtle'> = {
+  Unpaid: 'warning',
+  Paid: 'success',
+  Expired: 'subtle',
+};
+
+interface Invoice {
+  id: string;
+  billingDate: string;
+  number: string;
+  dueDate: string;
+  status: Status;
+}
+
+const STATUSES: Status[] = [
+  'Unpaid', 'Unpaid', 'Unpaid', 'Unpaid', 'Paid', 'Expired',
+  'Expired', 'Unpaid', 'Unpaid', 'Unpaid', 'Unpaid', 'Unpaid',
+];
+
+const INVOICES: Invoice[] = STATUSES.map((status, index) => ({
+  id: `invoice-${index + 1}`,
+  billingDate: 'Jun 02, 2023',
+  number: '32404/PID-FIN/INV/V/23',
+  dueDate: 'Jun 02, 2023',
+  status,
+}));
+
+/** The frame shows "Page 1 of 10" against a single page of rows. */
+const TOTAL_PAGES_IN_FRAME = 10;
+
+type SortKey = 'billingDate' | 'dueDate';
+
+/** Table Header with the frame's sort affordance. */
+function SortableHeader({
+  label,
+  active,
+  onClick,
+  className,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <TableHeaderCell className={className}>
+      <button
+        type="button"
+        onClick={onClick}
+        className="flex items-center gap-2 text-p2 font-medium text-subtle transition-colors hover:text-foreground"
+      >
+        {label}
+        <SortArrowsIcon className={`size-4 shrink-0 ${active ? 'text-foreground' : ''}`} />
+      </button>
+    </TableHeaderCell>
+  );
+}
 
 export default function BillingPage() {
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<string>('All status');
+  const [sort, setSort] = useState<{ key: SortKey; asc: boolean }>({ key: 'billingDate', asc: true });
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [page, setPage] = useState(1);
+  const [toast, setToast] = useState<string | null>(null);
+
+  const filtered = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    return INVOICES.filter(
+      (invoice) =>
+        (status === 'All status' || invoice.status === status) &&
+        (!term || invoice.number.toLowerCase().includes(term))
+    );
+  }, [query, status]);
+
+  const pageCount = Math.max(
+    query || status !== 'All status'
+      ? Math.ceil(filtered.length / rowsPerPage)
+      : TOTAL_PAGES_IN_FRAME,
+    1
+  );
+  const rows = filtered.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+  const toggleSort = (key: SortKey) =>
+    setSort((current) => ({ key, asc: current.key === key ? !current.asc : true }));
+
   return (
-    <AdminLayout trail={[{ label: 'PrivySign', href: '#' }, { label: 'Billing' }]} width="wide">
-      {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-h6 font-medium mb-2 text-foreground">Billing</h1>
-          <p className="text-subtle">Manage billing and subscription details</p>
-        </div>
+    <AdminLayout
+      trail={[
+        { label: 'PrivySign', href: '#' },
+        { label: 'Admin Center', href: '/' },
+        { label: 'Billing' },
+      ]}
+      width="bleed"
+    >
+      <TableToolbar
+        title="Billing"
+        query={query}
+        onQueryChange={(value) => {
+          setQuery(value);
+          setPage(1);
+        }}
+        searchWidth="w-[351px]"
+        filters={
+          <label className="relative flex items-center justify-center gap-2 rounded-md border border-[rgba(13,17,23,0.05)] bg-background px-3 py-1">
+            <select
+              aria-label="Filter by status"
+              value={status}
+              onChange={(event) => {
+                setStatus(event.target.value);
+                setPage(1);
+              }}
+              className="absolute inset-0 cursor-pointer opacity-0"
+            >
+              {STATUS_FILTERS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <span className="whitespace-nowrap text-p1 text-subtle">{status}</span>
+            <ChevronDownIcon className="size-5 shrink-0 text-subtle" />
+          </label>
+        }
+      />
 
-        {/* Billing Info Cards */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <Card className="p-6">
-            <p className="text-p2 text-subtle mb-2">Current Plan</p>
-            <p className="text-h6 font-bold text-foreground mb-2">Enterprise</p>
-            <p className="text-p2 text-subtle">Active since Jan 15, 2023</p>
-          </Card>
-          <Card className="p-6">
-            <p className="text-p2 text-subtle mb-2">Monthly Cost</p>
-            <p className="text-h6 font-bold text-foreground mb-2">Rp 5.000.000</p>
-            <p className="text-p2 text-subtle">Next billing date: May 15, 2024</p>
-          </Card>
-          <Card className="p-6">
-            <p className="text-p2 text-subtle mb-2">Payment Method</p>
-            <p className="text-p1 font-medium text-foreground mb-2">Bank Transfer</p>
-            <Button variant="outline" size="sm">Update Payment</Button>
-          </Card>
-        </div>
+      <div className="overflow-x-auto px-5">
+        <table className="w-full min-w-[860px] table-fixed border-collapse">
+          <thead>
+            <tr>
+              <SortableHeader
+                label="Billing date"
+                className="w-[159px]"
+                active={sort.key === 'billingDate'}
+                onClick={() => toggleSort('billingDate')}
+              />
+              <TableHeaderCell>Invoice number</TableHeaderCell>
+              <SortableHeader
+                label="Billing due date"
+                className="w-[159px]"
+                active={sort.key === 'dueDate'}
+                onClick={() => toggleSort('dueDate')}
+              />
+              <TableHeaderCell className="w-[95px] text-center">Status</TableHeaderCell>
+              <TableHeaderCell className="w-[56px]" srOnly="Actions" />
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((invoice) => (
+              <tr key={invoice.id}>
+                <TableCell className="whitespace-nowrap text-p2 text-foreground">
+                  {invoice.billingDate}
+                </TableCell>
+                <TableCell className="truncate text-p2 text-foreground">{invoice.number}</TableCell>
+                <TableCell className="whitespace-nowrap text-p2 text-foreground">
+                  {invoice.dueDate}
+                </TableCell>
+                <TableCell className="text-center">
+                  <Badge variant={STATUS_VARIANT[invoice.status]} className="text-p2">
+                    {invoice.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-center">
+                  <RowMenu
+                    label={`Actions for invoice ${invoice.number}`}
+                    items={[
+                      { label: 'Download invoice', icon: 'edit' },
+                      { label: 'Delete invoice', icon: 'delete' },
+                    ]}
+                  />
+                </TableCell>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-3 py-12 text-center text-p2 text-subtle">
+                  No invoices match the current filters.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
-        {/* Invoice History */}
-        <div>
-          <h2 className="text-h6 font-medium text-foreground mb-4">Invoice History</h2>
-          <Card className="overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-bg-alpha border-b border-border">
-                <tr>
-                  <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Date</th>
-                  <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Invoice Number</th>
-                  <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Amount</th>
-                  <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Status</th>
-                  <th className="text-left px-6 py-4 font-medium text-p2 text-foreground">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[1, 2, 3].map((i) => (
-                  <tr key={i} className="border-b border-border hover:bg-bg-alpha transition-colors">
-                    <td className="px-6 py-4 text-foreground">2024-04-15</td>
-                    <td className="px-6 py-4 text-foreground">INV-2024-{i.toString().padStart(4, '0')}</td>
-                    <td className="px-6 py-4 text-foreground">Rp 5.000.000</td>
-                    <td className="px-6 py-4">
-                      <span className="bg-success text-success-fg px-3 py-1 rounded-full text-p2 font-medium">
-                        Paid
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <Button variant="ghost" size="sm">Download</Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Card>
-        </div>
+      <Pagination
+        page={page}
+        pageCount={pageCount}
+        rowsPerPage={rowsPerPage}
+        onPageChange={setPage}
+        onRowsPerPageChange={(value) => {
+          setRowsPerPage(value);
+          setPage(1);
+        }}
+      />
+
+      <Toast message={toast ?? ''} open={toast !== null} onDismiss={() => setToast(null)} />
     </AdminLayout>
   );
 }

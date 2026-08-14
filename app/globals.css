@@ -14,6 +14,8 @@
   --bg-default-alpha: rgba(134, 136, 139, 0.05);
   --bg-info: #e5f0fa;
   --bg-ground: #f4f5f7;
+  --bg-subtle: #e7e7e8;
+  --bg-warning: #fef6e9;
   --bg-success: #e9f7ec;
   --bg-inverse: #0d1117;
 
@@ -25,6 +27,7 @@
   --fg-info: #004996;
   --fg-success: #248c3e;
   --fg-muted: #cbd1d8;
+  --fg-warning: #b07819;
 
   /* Border */
   --border-default: #dbdbdc;
